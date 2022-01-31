@@ -1,5 +1,15 @@
 # Change Log
+## 2021-01-23
 
+### Added
+
+- Added authentication module including account.js and utils/jwt.js
+- Added ErrorMessageSamples.xlsx file that shows the examples of common error message.
+
+### Changed
+
+- Modified app.js to handle the login and sign-up request using JWT.
+- Modified product.js to format the error messages in a same JSON object format.
 ## 2021-12-16
 
 ### Added
