@@ -1,7 +1,11 @@
 # Change Log
-
 ## 2021-01-23
 
+<<<<<<< HEAD
+## 2021-01-23
+
+=======
+>>>>>>> 72369fb0d5565808092581e798deaa38d1104120
 ### Added
 
 - Added authentication module including account.js and utils/jwt.js
@@ -11,7 +15,10 @@
 
 - Modified app.js to handle the login and sign-up request using JWT.
 - Modified product.js to format the error messages in a same JSON object format.
+<<<<<<< HEAD
 
+=======
+>>>>>>> 72369fb0d5565808092581e798deaa38d1104120
 ## 2021-12-16
 
 ### Added
