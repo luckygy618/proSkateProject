@@ -1,3 +1,4 @@
+/* products */
 /* create table */
 DROP TABLE IF EXISTS product_list;
 
@@ -54,4 +55,3 @@ UPDATE
     products
 SET
     description = REPLACE(description, '@', chr(13));
-

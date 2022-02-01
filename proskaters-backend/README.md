@@ -44,6 +44,10 @@ The web api services for Pro Skaters Shop.
 - `/products/:product_id` PUT - update a product
 - `/products/:product_id` DEL - delete a product
 - `/products/:product_id` GET - get a product
+- `/protected` GET - protected page
+- `/account/register` POST - register an account
+- `/accounts/login` POST - authenticate an account
+- `/accounts/validate` POST - validate a token
 
 ### Static files
 

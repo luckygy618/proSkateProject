@@ -1,5 +1,19 @@
 # Change Log
 
+## 2021-01-31
+
+### Added
+
+- Added unit test cases to support jwt, account registration, account login
+- Added the sql for create account table.
+- Added integration test cases to support login and registration
+
+### Changed
+
+- Account registration now returns id
+- Fixed a bug causing unmatching passwords in account registration to not throw
+- Fixed database connection pool. Now it releases the connection after perform a query.
+
 ## 2021-01-23
 
 ### Added

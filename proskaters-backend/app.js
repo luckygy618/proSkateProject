@@ -46,6 +46,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/index.html'));
 });
 
+app.get('/protected', checkToken, (req, res) => {
+  debug('visiting protected route');
+  res.sendFile(path.join(__dirname, '/protected.html'));
+});
+
 app.post('/images/add', (req, res) => {
   debug('uploading an image file');
   try {
@@ -210,7 +215,7 @@ app.post('/account/login', async (req, res) => {
           jwt
             .sign(req.body)
             .then((token) => {
-              res.json({ token: token });
+              res.json({ email: req.body.email, token: token });
             })
             .catch((err) => {
               res.status(404).json({

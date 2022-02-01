@@ -18,9 +18,11 @@ const productSchema = Joi.object({
 
 module.exports.getAllProducts = function () {
   return new Promise(async (resolve, reject) => {
+    var db;
     try {
-      const db = await pool.connect();
+      db = await pool.connect();
       let products = await db.query('SELECT * FROM products');
+
       if (products.rowCount < 1) {
         let msg = 'No data in database.';
         reject({
@@ -39,6 +41,8 @@ module.exports.getAllProducts = function () {
       reject({
         error: msg,
       });
+    } finally {
+      db.release(true);
     }
   });
 };
@@ -57,10 +61,12 @@ module.exports.validateProduct = function (product) {
 
 module.exports.addProduct = function (item) {
   return new Promise(async (resolve, reject) => {
+    var db;
     try {
-      const db = await pool.connect();
+      db = await pool.connect();
       var sql_insert = `INSERT INTO products(product_id, product_name, image, price, stock_amount, sku, brand, intro,description,stock_status,rating) VALUES ('${item.product_id}','${item.product_name}','${item.image}',${item.price},${item.stock_amount},'${item.sku}','${item.brand}','${item.intro}','${item.description}','${item.stock_status}',${item.rating});`;
       let result = await db.query(sql_insert);
+
       if (result.rowCount == 1) {
         let msg = 'product added to database.';
         resolve({
@@ -83,22 +89,27 @@ module.exports.addProduct = function (item) {
       reject({
         error: msg,
       });
+    } finally {
+      db.release(true);
     }
   });
 };
 
 module.exports.updateProduct = function (productId, item) {
   return new Promise(async (resolve, reject) => {
+    var db;
     try {
-      const db = await pool.connect();
       if (productId != item.product_id) {
         let err = 'product id does not match';
         reject({
           error: err,
         });
       }
+
+      db = await pool.connect();
       var sql_update = `UPDATE products SET product_name = '${item.product_name}', image = '${item.image}',  price= ${item.price}, stock_amount =  ${item.stock_amount}, sku='${item.sku}',brand = '${item.brand}',intro='${item.intro}',description='${item.description}',stock_status='${item.stock_status}',rating=${item.rating} where product_id = '${item.product_id}';`;
       let result = await db.query(sql_update);
+
       if (result.rowCount == 1) {
         let msg = 'product updated.';
         resolve({
@@ -121,14 +132,17 @@ module.exports.updateProduct = function (productId, item) {
       reject({
         error: msg,
       });
+    } finally {
+      db.release(true);
     }
   });
 };
 
 module.exports.deleteProduct = function (productId) {
   return new Promise(async (resolve, reject) => {
+    var db;
     try {
-      const db = await pool.connect();
+      db = await pool.connect();
       var sql_delete = `delete from products where product_id = '${productId}';`;
       let result = await db.query(sql_delete);
 
@@ -154,14 +168,17 @@ module.exports.deleteProduct = function (productId) {
       reject({
         error: msg,
       });
+    } finally {
+      db.release(true);
     }
   });
 };
 
 module.exports.getProduct = function (productId) {
   return new Promise(async (resolve, reject) => {
+    var db;
     try {
-      const db = await pool.connect();
+      db = await pool.connect();
       let products = await db.query(`SELECT * FROM products where product_id = '${productId}';`);
 
       if (products.rowCount == 0) {
@@ -188,6 +205,8 @@ module.exports.getProduct = function (productId) {
       reject({
         error: msg,
       });
+    } finally {
+      db.release(true);
     }
   });
 };

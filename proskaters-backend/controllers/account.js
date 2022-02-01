@@ -75,9 +75,8 @@ module.exports.validateRegister = function (item) {
         resolve(result);
       } else {
         let message = 'password does not match confirm password.';
-        reject({
-          error: message,
-        });
+        debug(message);
+        throw new Error(message);
       }
     } catch (err) {
       debug(err);
@@ -88,22 +87,20 @@ module.exports.validateRegister = function (item) {
 
 module.exports.registerAccount = function (item) {
   return new Promise(async (resolve, reject) => {
+    var db;
     try {
-      const db = await pool.connect();
+      db = await pool.connect();
       let salt = await bcrypt.genSalt(ROUNDS);
       let passhash = await bcrypt.hash(item.password, salt);
 
-      var sql = `INSERT INTO accounts (email, passhash) VALUES ('${item.email}', '${passhash}');`;
-
+      var sql = `INSERT INTO accounts (email, passhash) VALUES ('${item.email}', '${passhash}') RETURNING id;`;
       let result = await db.query(sql);
-
       if (result.rowCount == 1) {
-        let msg = { message: 'Account registration success.' };
-        resolve({
-          message: msg,
-        });
+        let msg = result.rows[0];
+        msg.message = 'Account registration success.';
+        resolve(msg);
       } else {
-        let msg = 'Faild to insert registration to database.';
+        let msg = 'Failed to insert registration to database.';
         reject({
           error: msg,
         });
@@ -116,10 +113,11 @@ module.exports.registerAccount = function (item) {
       } else if (typeof err.routine != 'undefined' && err.routine == 'auth_failed') {
         msg = 'Failed to connect to database';
       }
-
       reject({
         error: msg,
       });
+    } finally {
+      db.release(true);
     }
   });
 };
@@ -138,8 +136,9 @@ module.exports.validateLogin = function (item) {
 
 module.exports.verifyAccount = function (item) {
   return new Promise(async (resolve, reject) => {
+    var db;
     try {
-      const db = await pool.connect();
+      db = await pool.connect();
       let accounts = await db.query(`SELECT * FROM accounts WHERE email = '${item.email}';`);
       if (accounts.rowCount == 0) {
         let err = 'account not found for email ' + item.email;
@@ -186,6 +185,8 @@ module.exports.verifyAccount = function (item) {
       reject({
         error: msg,
       });
+    } finally {
+      db.release(true);
     }
   });
 };
