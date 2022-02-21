@@ -1,7 +1,7 @@
-const debug = require('debug')('api:controllers:account');
+const debug = require('debug')('api:controllers:account:authentication');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
-const pool = require('../database/pool');
+const pool = require('../../database/pool');
 
 const ROUNDS = 10;
 
@@ -46,26 +46,6 @@ const loginSchema = Joi.object({
     .required(),
 });
 
-const tokenSchema = Joi.object({
-  token: Joi.string()
-    .regex(/^[a-zA-Z0-9._-]*$/)
-    .min(50)
-    .max(225)
-    .required(),
-});
-
-module.exports.validateToken = function (item) {
-  return new Promise((resolve, reject) => {
-    try {
-      result = Joi.attempt(item, tokenSchema);
-      resolve(result);
-    } catch (err) {
-      debug(err);
-      reject(err);
-    }
-  });
-};
-
 module.exports.validateRegister = function (item) {
   return new Promise((resolve, reject) => {
     try {
@@ -74,9 +54,7 @@ module.exports.validateRegister = function (item) {
       if (item.password === item.confirmPassword) {
         resolve(result);
       } else {
-        let message = 'password does not match confirm password.';
-        debug(message);
-        throw new Error(message);
+        throw new Error('password does not match confirm password.');
       }
     } catch (err) {
       debug(err);
@@ -96,26 +74,13 @@ module.exports.registerAccount = function (item) {
       var sql = `INSERT INTO accounts (email, passhash) VALUES ('${item.email}', '${passhash}') RETURNING id;`;
       let result = await db.query(sql);
       if (result.rowCount == 1) {
-        let msg = result.rows[0];
-        msg.message = 'Account registration success.';
-        resolve(msg);
+        resolve(result.rows[0]);
       } else {
-        let msg = 'Failed to insert registration to database.';
-        reject({
-          error: msg,
-        });
+        reject(`Failed to register account ${item.email} into database.`);
       }
     } catch (err) {
       debug(err);
-      var msg = err;
-      if (typeof err.detail != 'undefined') {
-        msg = err.detail;
-      } else if (typeof err.routine != 'undefined' && err.routine == 'auth_failed') {
-        msg = 'Failed to connect to database';
-      }
-      reject({
-        error: msg,
-      });
+      reject(err);
     } finally {
       db.release(true);
     }
@@ -141,17 +106,13 @@ module.exports.verifyAccount = function (item) {
       db = await pool.connect();
       let accounts = await db.query(`SELECT * FROM accounts WHERE email = '${item.email}';`);
       if (accounts.rowCount == 0) {
-        let err = 'account not found for email ' + item.email;
-        reject({
-          error: err,
-        });
+        reject(`account not found for email ${item.email}`);
+        return;
       }
 
       if (accounts.rowCount > 1) {
-        let err = 'multiple accounts found for email ' + item.email;
-        reject({
-          error: err,
-        });
+        reject(`multiple accounts found for email ${item.email}`);
+        return;
       }
 
       let account = accounts.rows[0];
@@ -161,30 +122,16 @@ module.exports.verifyAccount = function (item) {
           if (result == true) {
             resolve(result);
           } else {
-            let msg = 'incorrect password.';
-            debug(msg);
-            reject({
-              error: msg,
-            });
+            reject('incorrect password');
           }
         })
         .catch((err) => {
           debug(err);
-          reject({
-            error: err,
-          });
+          reject(err);
         });
     } catch (err) {
-      var msg = err;
-      if (typeof err.detail != 'undefined') {
-        msg = err.detail;
-      } else if (typeof err.routine != 'undefined' && err.routine == 'auth_failed') {
-        msg = 'Failed to connect to database';
-      }
       debug(err);
-      reject({
-        error: msg,
-      });
+      reject(err);
     } finally {
       db.release(true);
     }

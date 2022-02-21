@@ -34,20 +34,7 @@ The web api services for Pro Skaters Shop.
 - `PG_PORT = 5432`
 - `USE_SSL = 0`
 - `PORT = 8080`
-
-### API agreement
-
-- `/` GET - homepage
-- `/images/add` POST - upload an image file
-- `/products` GET - get a list of products
-- `/products/add` POST - add a product
-- `/products/:product_id` PUT - update a product
-- `/products/:product_id` DEL - delete a product
-- `/products/:product_id` GET - get a product
-- `/protected` GET - protected page
-- `/account/register` POST - register an account
-- `/accounts/login` POST - authenticate an account
-- `/accounts/validate` POST - validate a token
+- `STRIPE_SECRET_KEY = <stripe_secret_key>`
 
 ### Static files
 

@@ -1,32 +1,31 @@
-const debug = require('debug')('api:test:server');
+const debug = require('debug')('api:test:e2e:account:authentication');
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../database/pool');
+const setup = require('./setup');
 
 let id = 0;
 
 beforeAll(async () => {
   try {
-    const db = await pool.connect();
-    await db.query(`CREATE TABLE IF NOT EXISTS accounts (
-      id serial PRIMARY KEY,
-      email varchar(30) NOT NULL UNIQUE,
-      passhash varchar(60) NOT NULL,
-      verified BOOLEAN NOT NULL DEFAULT FALSE
-  );`);
+    var db = await pool.connect();
+    await db.query(setup.ACCOUNT_TABLE_CREATION);
   } catch (err) {
     debug(err);
+  } finally {
+    db.release(true);
   }
 });
 
 afterAll(async () => {
   try {
     // cleanup
-    let db = await pool.connect();
+    var db = await pool.connect();
     await db.query(`DELETE FROM accounts WHERE id = '${id}';`);
-    await pool.close();
   } catch (err) {
     debug(err);
+  } finally {
+    db.release(true);
   }
 });
 
@@ -98,19 +97,7 @@ describe('api endpoint testing', () => {
       });
   });
 
-  it('validating a valid token', () => {
-    request(app).post('/account/validate').send({ token: token }).expect(404);
-  });
-
-  it('validating an invalid token', () => {
-    request(app)
-      .post('/account/validate')
-      .send({ token: '198347189ksdfjklwior5.o0234-sdfa' })
-      .expect(404);
-  });
-
   it('visiting protected route', () => {
-    console.log(token);
     return request(app).get('/protected').set('Authorization', `Bearer ${token}`).expect(200);
   });
 });

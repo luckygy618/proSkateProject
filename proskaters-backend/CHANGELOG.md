@@ -1,5 +1,39 @@
 # Change Log
 
+## 2021-02-20
+
+- Add routes and controllers for updating and getting account info
+- Add unit and integration test cases to support `updateAccountInfo` and `getAccountInfo`
+
+### Changed
+
+- Separate `app.js` route functions into their own route files
+- Remove `async` from most of the routing functions
+
+### Fixed
+
+- Remove `retrievePaymentInfo`, payment info will be retrieved in the `getAccountInfo` instead
+
+## 2021-02-19
+
+### Added
+
+- Added integration test cases to support avePaymentInfo, and retrievePaymentInfo.
+
+### Changed
+
+- Unified error message returning to the party requesting resources from the API backend service
+- Enhance API documentation, stating the method, route, input data, expected output and errors for each endpoint
+
+## 2021-02-18
+
+### Added
+
+- Added unit test cases to support validatePayment.
+- Added the sql for create payments table.
+- Added payments module to create Stripe PaymentMethod object to save payment information, and retrieve the saved payment information.
+- Added routes to listen to the clients' requests to save and retrieve payment information.
+
 ## 2021-01-31
 
 ### Added

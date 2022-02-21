@@ -1,0 +1,33 @@
+<div class="container-fluid">
+    <article class="product row" *ngIf="product != undefined && isLoggedIn()">
+        <section class="col-sm-12 col-md-5">
+            <h1 class="h3">{{ product.product_name }}</h1>
+            <img src="{{ imageUrl + '/' + product.image }}" alt="{{ product.product_name }}" class="img-fluid">
+        </section>
+
+        <section class="col-sm-12 col-md-5">
+            <h2 class="h6">{{ product.product_name }} Details</h2>
+            <h3>${{ product.price }}</h3>
+            <p class="formatted-text" [innerHTML]="product.intro | replaceLineBreaks"></p>
+            <p class="formatted-text" [innerHTML]="product.description | replaceLineBreaks"></p>
+        </section>
+
+        <section class="col-sm-12 col-md-2">
+            <h3 class="h6">Additional Information</h3>
+            <ul class="list-group">
+                <li class="list-group-item">SKU: {{ product.sku }}</li>
+                <li class="list-group-item">Availability: {{ product.stock_status }}</li>
+                <li *ngIf="product.stock_amount" class="list-group-item">Amount Available: {{ product.stock_amount }}</li>
+                <li *ngIf="product.rating" class="list-group-item text-warning">
+                    <fa-icon *ngFor="let num of starArray; let i = index" [icon]="star"></fa-icon>
+                </li>
+                <li class="list-group-item">Brand: {{ product.brand }}</li>
+            </ul>
+        </section>
+    </article>
+
+    <article *ngIf="!isLoggedIn()">
+        <app-alert [display]="!isLoggedIn()" type="info" message="Please login to view this product.">
+        </app-alert>
+    </article>
+</div>

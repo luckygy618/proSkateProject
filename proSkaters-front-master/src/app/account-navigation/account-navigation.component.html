@@ -1,0 +1,21 @@
+<nav id="account-nav">
+    <button (click)="opened=!opened" class="btn btn-primary btn-sm float-right" *ngIf="!isLoggedIn()">
+        <fa-icon [icon]="signIn" class="input-icon"></fa-icon> Login
+    </button>
+    <button [routerLink]="['/account/register']" class="btn btn-primary btn-sm float-right" *ngIf="!isLoggedIn()">
+        <fa-icon [icon]="userPlus" class="input-icon"></fa-icon> Register
+    </button>
+
+    <button (click)="logout()" class="btn btn-primary btn-sm float-right" *ngIf="isLoggedIn()">
+        <fa-icon [icon]="signOut" class="input-icon"></fa-icon> Logout
+    </button>
+    <div id="account-info" class="float-right mr-3" *ngIf="isLoggedIn()">
+        <fa-icon [icon]="user"></fa-icon> Logged in with <fa-icon [icon]="envelope"></fa-icon> {{ email }}
+    </div>
+
+    <ng-template [ngIf]="opened && !isLoggedIn()">
+        <section id="login-panel" class="bg-white rounded shadow p-3">
+            <app-login></app-login>
+        </section>
+    </ng-template>
+</nav>

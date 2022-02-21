@@ -1,5 +1,5 @@
 const debug = require('debug')('api:test:account:login');
-const { validateLogin } = require('../../controllers/account');
+const { validateLogin } = require('../../controllers/account/authentication');
 
 describe('login email validation tests', () => {
   let testData = [

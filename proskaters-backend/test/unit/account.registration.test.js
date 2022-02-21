@@ -1,5 +1,5 @@
 const debug = require('debug')('api:test:account:registration');
-const { validateRegister } = require('../../controllers/account');
+const { validateRegister } = require('../../controllers/account/authentication');
 
 describe('registration email validation tests', () => {
   let testData = [
