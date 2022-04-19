@@ -1,0 +1,23 @@
+<nav id="main-nav">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <button [routerLink]="['/']" class="btn btn-lg border-primary">
+        <fa-icon [icon]="home" class="input-icon"></fa-icon>
+      </button>
+    </div>
+    <input
+      class="form-control form-control-lg"
+      list="productOptions"
+      id="orderSearch"
+      placeholder="Type to search..."
+    />
+    <div class="input-group-append">
+      <button class="btn btn-lg btn-primary" type="button">
+        <fa-icon [icon]="search"></fa-icon>
+      </button>
+    </div>
+  </div>
+  <datalist id="productOptions">
+    <option value="San Francisco"></option>
+  </datalist>
+</nav>

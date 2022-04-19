@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <div *ngIf="isLoggedIn()" class="row">
+    <div class="col-md-3">
+      <app-customer-account-menu [active]="'payment'"></app-customer-account-menu>
+    </div>
+    <div class="col-md-9">
+      <section class="rounded shadow-sm p-3">
+        <h1 class="h3 text-center">
+          <fa-icon [icon]="stripe"></fa-icon> Update Payment Information
+        </h1>
+        <div class="row justify-content-md-center">
+          <div class="col-xs-12 col-md-9">
+            <app-update-payment-form></app-update-payment-form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <section *ngIf="!isLoggedIn()">
+    <app-alert [display]="!isLoggedIn()" type="info" message="Please login to view this page.">
+    </app-alert>
+  </section>
+</div>

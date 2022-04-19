@@ -1,0 +1,146 @@
+<div class="container-fluid">
+  <div *ngIf="isLoggedIn()" class="row">
+    <div class="col-md-3">
+      <app-customer-account-menu [active]="'info'"></app-customer-account-menu>
+    </div>
+    <div class="col-md-9">
+      <section *ngIf="isDefined(loginSuccess)" class="row justify-content-md-center">
+        <div class="col-md-6">
+          <app-alert
+            [display]="isDefined(loginSuccess)"
+            type="success"
+            message="Successfully logged in to account with email address {{ account.email }}!"
+          >
+          </app-alert>
+        </div>
+      </section>
+
+      <section class="rounded shadow-sm p-3">
+        <h1 class="h3 text-center"><fa-icon [icon]="userCheck"></fa-icon> Account Information</h1>
+        <div *ngIf="account != undefined" class="row">
+          <div class="col-md-6">
+            <h2 class="h5 mt-3"><fa-icon [icon]="signIn"></fa-icon> Login Information</h2>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <fa-icon [icon]="envelope"></fa-icon> Email:
+                <span *ngIf="isDefined(account.email)">{{ account.email }}</span>
+              </li>
+              <li class="list-group-item">
+                <fa-icon [icon]="lock"></fa-icon> Password:
+                &#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;
+                (<a [routerLink]="['/account/settings/password']">Update Password</a>)
+              </li>
+            </ul>
+            <h2 class="h5 mt-3"><fa-icon [icon]="user"></fa-icon> Personal Information</h2>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <fa-icon [icon]="handShake"></fa-icon> Salutation:
+                <span *ngIf="isDefined(account.salutation)">{{ account.salutation }} </span>(<a
+                  [routerLink]="['/account/settings']"
+                  >Update Salutation</a
+                >)
+              </li>
+              <li class="list-group-item">
+                <fa-icon [icon]="userCircle"></fa-icon> First Name:
+                <span *ngIf="isDefined(account.firstName)">{{ account.firstName }} </span>(<a
+                  [routerLink]="['/account/settings']"
+                  >Update First Name</a
+                >)
+              </li>
+              <li class="list-group-item">
+                <fa-icon [icon]="userCircle"></fa-icon> Last Name:
+                <span *ngIf="isDefined(account.lastName)">{{ account.lastName }} </span>(<a
+                  [routerLink]="['/account/settings']"
+                  >Update Last Name</a
+                >)
+              </li>
+              <li class="list-group-item">
+                <fa-icon [icon]="phone"></fa-icon> Phone Number:
+                <span *ngIf="isDefined(account.phoneNumber)">{{ account.phoneNumber }} </span>(<a
+                  [routerLink]="['/account/settings']"
+                  >Update Phone Number</a
+                >)
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <h2 class="h5 mt-3"><fa-icon [icon]="addressBook"></fa-icon> Address Information</h2>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <fa-icon [icon]="shipping"></fa-icon> Shipping Address:
+                <span *ngIf="isDefined(account.shippingAddress)">
+                  <span *ngIf="isDefined(account.shippingAddress.address1)">
+                    <br />{{ account.shippingAddress.address1 }}
+                  </span>
+                  <span *ngIf="isDefined(account.shippingAddress.address2)">
+                    <br />{{ account.shippingAddress.address2 }}
+                  </span>
+                  <span *ngIf="isDefined(account.shippingAddress.city)">
+                    <br />{{ account.shippingAddress.city }}
+                  </span>
+                  <span *ngIf="isDefined(account.shippingAddress.province)">
+                    <br />{{ account.shippingAddress.province }}
+                  </span>
+                  <span *ngIf="isDefined(account.shippingAddress.country)">
+                    <br />{{ account.shippingAddress.country }}
+                  </span>
+                  <span *ngIf="isDefined(account.shippingAddress.postalCode)">
+                    <br />{{ account.shippingAddress.postalCode }}
+                  </span>
+                </span>
+                (<a [routerLink]="['/account/settings']">Update Shipping Address</a>)
+              </li>
+              <li class="list-group-item">
+                <fa-icon [icon]="invoice"></fa-icon> Billing Address:
+                <span *ngIf="isDefined(account.billingAddress)">
+                  <span *ngIf="isDefined(account.billingAddress.address1)">
+                    <br />{{ account.billingAddress.address1 }}
+                  </span>
+                  <span *ngIf="isDefined(account.billingAddress.address2)">
+                    <br />{{ account.billingAddress.address2 }}
+                  </span>
+                  <span *ngIf="isDefined(account.billingAddress.city)">
+                    <br />{{ account.billingAddress.city }}
+                  </span>
+                  <span *ngIf="isDefined(account.billingAddress.province)">
+                    <br />{{ account.billingAddress.province }}
+                  </span>
+                  <span *ngIf="isDefined(account.billingAddress.country)">
+                    <br />{{ account.billingAddress.country }}
+                  </span>
+                  <span *ngIf="isDefined(account.billingAddress.postalCode)">
+                    <br />{{ account.billingAddress.postalCode }}
+                  </span>
+                </span>
+                (<a [routerLink]="['/account/settings']">Update Billing Address</a>)
+              </li>
+            </ul>
+            <h2 class="h5 mt-3"><fa-icon [icon]="dollarSign"></fa-icon> Payment Information</h2>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <fa-icon [icon]="creditCard"></fa-icon> Payment Method:
+                <span *ngIf="isDefined(account.paymentInfo)">
+                  {{ paymentType }}
+                  <span
+                    *ngIf="
+                      isDefined(account.paymentInfo.card) &&
+                      isDefined(account.paymentInfo.card.last4)
+                    "
+                  >
+                    with number {{ hiddenNumber }} which expires on {{ month }} - {{ year }}
+                  </span>
+                </span>
+                (<a [routerLink]="['/account/settings/payment']">Update Payment Method</a>)
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <section *ngIf="!isLoggedIn()">
+    <app-alert [display]="!isLoggedIn()" type="info" message="Please login to view this page.">
+    </app-alert>
+  </section>
+</div>

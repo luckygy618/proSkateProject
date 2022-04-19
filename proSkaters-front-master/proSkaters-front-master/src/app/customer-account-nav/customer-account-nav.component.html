@@ -1,0 +1,72 @@
+<nav
+  *ngIf="isLoggedIn"
+  id="customer-account-nav"
+  class="d-flex justify-content-end align-items-center"
+>
+  <button
+    class="btn btn-sm border-primary"
+    [ngClass]="{ 'btn-primary': opened }"
+    (click)="opened = !opened"
+  >
+    <div>
+      <small
+        ><fa-icon [icon]="user"></fa-icon> Hello, {{ account.firstName }}
+        {{ account.lastName }}</small
+      >
+    </div>
+    <div>
+      Account Options
+      <fa-icon [icon]="chevronRight" *ngIf="!opened"></fa-icon>
+      <fa-icon [icon]="chevronDown" *ngIf="opened"></fa-icon>
+    </div>
+  </button>
+  <div id="customer-account-nav-options" class="list-group shadow">
+    <a
+      *ngIf="opened"
+      class="list-group-item list-group-item-action border border-primary"
+      [ngClass]="{ active: active == 'info' }"
+      (click)="active = 'info'"
+      [routerLink]="['/account']"
+      ><fa-icon [icon]="userCheck"></fa-icon> Account Information</a
+    >
+    <a
+      *ngIf="opened"
+      class="list-group-item list-group-item-action border border-primary"
+      [ngClass]="{ active: active == 'settings' }"
+      (click)="active = 'settings'"
+      [routerLink]="['/account/settings']"
+      ><fa-icon [icon]="userCog"></fa-icon> Account Settings</a
+    >
+    <a
+      *ngIf="opened"
+      class="list-group-item list-group-item-action border border-primary"
+      [ngClass]="{ active: active == 'password' }"
+      (click)="active = 'password'"
+      [routerLink]="['/account/settings/password']"
+      ><fa-icon [icon]="userLock"></fa-icon> Update Password</a
+    >
+    <a
+      *ngIf="opened"
+      class="list-group-item list-group-item-action border border-primary"
+      [ngClass]="{ active: active == 'payment' }"
+      (click)="active = 'payment'"
+      [routerLink]="['/account/settings/payment']"
+      ><fa-icon [icon]="stripe"></fa-icon> Update Payment Information</a
+    >
+    <a
+      *ngIf="opened"
+      class="list-group-item list-group-item-action border border-primary"
+      [ngClass]="{ active: active == 'history' }"
+      (click)="active = 'history'"
+      [routerLink]="['/account/history']"
+      ><fa-icon [icon]="history"></fa-icon> View Purchase History</a
+    >
+    <button
+      *ngIf="opened"
+      class="list-group-item list-group-item-action border border-primary"
+      (click)="logout()"
+    >
+      <fa-icon [icon]="signOut" class="input-icon"></fa-icon> Logout
+    </button>
+  </div>
+</nav>

@@ -1,0 +1,319 @@
+<div class="container-fluid">
+  <div *ngIf="isLoggedIn" class="row">
+    <div class="col-md-3">
+      <app-customer-account-menu [active]="'history'"></app-customer-account-menu>
+    </div>
+    <div class="col-md-9">
+      <section *ngIf="isDefined(loginSuccess)" class="row justify-content-md-center">
+        <div class="col-md-6">
+          <app-alert
+            [display]="isDefined(loginSuccess)"
+            type="success"
+            message="Successfully logged in to account with email address {{ account.email }}!"
+          >
+          </app-alert>
+          <app-alert
+            [display]="isDefined(refundSuccess)"
+            type="success"
+            message="Error requesting refund."
+          >
+          </app-alert>
+          <app-alert
+            [display]="isDefined(refundError)"
+            type="error"
+            message="Successfully placed request for refund."
+          >
+          </app-alert>
+          <app-alert
+            [display]="isDefined(cancelSuccess)"
+            type="success"
+            message="Error cancelling order."
+          >
+          </app-alert>
+          <app-alert
+            [display]="isDefined(cancelError)"
+            type="error"
+            message="Successfully cancelled order."
+          >
+          </app-alert>
+        </div>
+      </section>
+
+      <section class="rounded shadow-sm p-3">
+        <h1 class="h3 text-center"><fa-icon [icon]="history"></fa-icon> Purchase History</h1>
+        <nav *ngIf="account != undefined" class="row justify-content-md-center">
+          <div class="col-md-4 mt-2 mb-2">
+            <h2 class="h4"><fa-icon [icon]="receipt"></fa-icon> Your Orders</h2>
+          </div>
+          <div class="col-md-8 mt-2 mb-2">
+            <div class="input-group">
+              <input
+                #orderSearchBar
+                (input)="(orderSearchBar.value)"
+                class="form-control"
+                list="orderOptions"
+                id="orderSearch"
+                placeholder="Type to search orders..."
+              />
+              <div class="input-group-append">
+                <button
+                  (click)="onSubmitSearchOrders(orderSearchBar.value)"
+                  class="btn btn-primary"
+                  type="button"
+                >
+                  <fa-icon [icon]="search"></fa-icon> Search Orders
+                </button>
+              </div>
+            </div>
+            <datalist id="orderOptions">
+              <option *ngFor="let product of productList" value="{{ product.product_name }}">
+                {{ product.product_name }}
+              </option>
+            </datalist>
+          </div>
+          <div class="col-12 mt-2 mb-2">
+            <ngb-tabset [destroyOnHide]="false">
+              <ngb-tab>
+                <ng-template ngbTabTitle><fa-icon [icon]="receipt"></fa-icon> Orders</ng-template>
+                <ng-template ngbTabContent>
+                  <div class="row">
+                    <div class="col-md-4 mt-2 mb-2">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <label for="orderSearch" class="input-group-text"
+                            ><fa-icon [icon]="calendar" class="input-icon"></fa-icon> View orders
+                            placed in
+                          </label>
+                        </div>
+                        <select
+                          (change)="onChangeYear($event.target.value)"
+                          name="orderDate"
+                          id="orderDate"
+                          class="form-control"
+                        >
+                          <option value="2022">2022</option>
+                          <option value="2021">2021</option>
+                          <option value="2020">2020</option>
+                          <option value="2019">2019</option>
+                          <option value="2018">2018</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 class="h5">
+                    <fa-icon [icon]="receipt"></fa-icon>
+                    {{ ordersByYear(selectedYear).length }} Order<span
+                      *ngIf="ordersByYear(selectedYear).length != 1"
+                      >s</span
+                    >
+                    Placed in {{ selectedYear }}
+                  </h3>
+                  <ul class="list-unstyled">
+                    <li *ngFor="let order of ordersByYear(selectedYear) | reverse">
+                      <app-order [order]="order" [account]="account"></app-order>
+                    </li>
+                  </ul>
+                </ng-template>
+              </ngb-tab>
+
+              <ngb-tab>
+                <ng-template ngbTabTitle
+                  ><fa-icon [icon]="shipping"></fa-icon> Shipped Items</ng-template
+                >
+                <ng-template ngbTabContent>
+                  <div class="row">
+                    <div class="col-md-4 mt-2 mb-2">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <label for="orderSearch" class="input-group-text"
+                            ><fa-icon [icon]="calendar" class="input-icon"></fa-icon> View orders
+                            placed in
+                          </label>
+                        </div>
+                        <select
+                          (change)="onChangeYear($event.target.value)"
+                          name="orderDate"
+                          id="orderDate"
+                          class="form-control"
+                        >
+                          <option value="2022">2022</option>
+                          <option value="2021">2021</option>
+                          <option value="2020">2020</option>
+                          <option value="2019">2019</option>
+                          <option value="2018">2018</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 class="h5">
+                    <fa-icon [icon]="shipping"></fa-icon> {{ shippedOrders().length }} Shipped Items
+                    From Order<span *ngIf="shippedOrders().length != 1">s</span> Placed in
+                    {{ selectedYear }}
+                  </h3>
+                  <ul class="list-unstyled">
+                    <li *ngFor="let order of ordersByYear(selectedYear) | reverse">
+                      <app-order
+                        *ngIf="order.status == 'shipped' || order.status == 'delivered'"
+                        [order]="order"
+                        [account]="account"
+                      ></app-order>
+                    </li>
+                  </ul>
+                </ng-template>
+              </ngb-tab>
+
+              <ngb-tab>
+                <ng-template ngbTabTitle
+                  ><fa-icon [icon]="box"></fa-icon> Not Yet Shipped</ng-template
+                >
+                <ng-template ngbTabContent>
+                  <div class="row">
+                    <div class="col-md-4 mt-2 mb-2">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <label for="orderSearch" class="input-group-text"
+                            ><fa-icon [icon]="calendar" class="input-icon"></fa-icon> View orders
+                            placed in
+                          </label>
+                        </div>
+                        <select
+                          (change)="onChangeYear($event.target.value)"
+                          name="orderDate"
+                          id="orderDate"
+                          class="form-control"
+                        >
+                          <option value="2022">2022</option>
+                          <option value="2021">2021</option>
+                          <option value="2020">2020</option>
+                          <option value="2019">2019</option>
+                          <option value="2018">2018</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 class="h5">
+                    <fa-icon [icon]="box"></fa-icon> {{ unshippedOrders().length }} Order<span
+                      *ngIf="ordersByYear(selectedYear).length != 1"
+                      >s</span
+                    >
+                    Not Yet Shipped From {{ selectedYear }}
+                  </h3>
+                  <ul class="list-unstyled">
+                    <li *ngFor="let order of unshippedOrders() | reverse">
+                      <app-order
+                        *ngIf="order.status == 'ordered'"
+                        [order]="order"
+                        [account]="account"
+                      ></app-order>
+                    </li>
+                  </ul>
+                </ng-template>
+              </ngb-tab>
+
+              <ngb-tab>
+                <ng-template ngbTabTitle
+                  ><fa-icon [icon]="dollarSign"></fa-icon> Refunding Orders</ng-template
+                >
+                <ng-template ngbTabContent>
+                  <div class="row">
+                    <div class="col-md-4 mt-2 mb-2">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <label for="orderSearch" class="input-group-text"
+                            ><fa-icon [icon]="calendar" class="input-icon"></fa-icon> View orders
+                            placed in
+                          </label>
+                        </div>
+                        <select
+                          (change)="onChangeYear($event.target.value)"
+                          name="orderDate"
+                          id="orderDate"
+                          class="form-control"
+                        >
+                          <option value="2022">2022</option>
+                          <option value="2021">2021</option>
+                          <option value="2020">2020</option>
+                          <option value="2019">2019</option>
+                          <option value="2018">2018</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 class="h5">
+                    <fa-icon [icon]="dollarSign"></fa-icon>
+                    {{ refundingOrders().length }} Order<span *ngIf="refundingOrders().length != 1"
+                      >s</span
+                    >
+                    Refunding From {{ selectedYear }}
+                  </h3>
+                  <ul class="list-unstyled">
+                    <li *ngFor="let order of refundingOrders() | reverse">
+                      <app-order
+                        *ngIf="order.status == 'refunding'"
+                        [order]="order"
+                        [account]="account"
+                      ></app-order>
+                    </li>
+                  </ul>
+                </ng-template>
+              </ngb-tab>
+
+              <ngb-tab>
+                <ng-template ngbTabTitle
+                  ><fa-icon [icon]="cancelled"></fa-icon> Cancelled Orders</ng-template
+                >
+                <ng-template ngbTabContent>
+                  <div class="row">
+                    <div class="col-md-4 mt-2 mb-2">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <label for="orderSearch" class="input-group-text"
+                            ><fa-icon [icon]="calendar" class="input-icon"></fa-icon> View orders
+                            placed in
+                          </label>
+                        </div>
+                        <select
+                          (change)="onChangeYear($event.target.value)"
+                          name="orderDate"
+                          id="orderDate"
+                          class="form-control"
+                        >
+                          <option value="2022">2022</option>
+                          <option value="2021">2021</option>
+                          <option value="2020">2020</option>
+                          <option value="2019">2019</option>
+                          <option value="2018">2018</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 class="h5">
+                    <fa-icon [icon]="cancelled"></fa-icon> {{ cancelledOrders().length }} Order<span
+                      *ngIf="cancelledOrders().length != 1"
+                      >s</span
+                    >
+                    Canceled From {{ selectedYear }}
+                  </h3>
+                  <ul class="list-unstyled">
+                    <li *ngFor="let order of cancelledOrders() | reverse">
+                      <app-order
+                        *ngIf="order.status == 'canceled'"
+                        [order]="order"
+                        [account]="account"
+                      ></app-order>
+                    </li>
+                  </ul>
+                </ng-template>
+              </ngb-tab>
+            </ngb-tabset>
+          </div>
+        </nav>
+      </section>
+    </div>
+  </div>
+
+  <section *ngIf="!isLoggedIn">
+    <app-alert [display]="!isLoggedIn" type="info" message="Please login to view this page.">
+    </app-alert>
+  </section>
+</div>

@@ -1,0 +1,29 @@
+<nav id="cart-nav" class="d-flex justify-content-end align-items-center mr-2">
+  <div class="btn-group">
+    <button class="btn btn-lg border-primary" [routerLink]="['/cart']">
+      <fa-icon [icon]="shoppingCartIcon"></fa-icon> Cart (<strong class="text-primary">{{
+        totalQuantity
+      }}</strong
+      >)
+    </button>
+    <button
+      class="btn btn-sm border border-primary"
+      [routerLink]="['/checkout']"
+      [disabled]="totalQuantity < 1"
+    >
+      <div><fa-icon [icon]="cashRegister"></fa-icon> Checkout</div>
+      <div *ngIf="totalQuantity < 1">
+        <small><fa-icon [icon]="shoppingCartIcon"></fa-icon> Cart is Empty</small>
+      </div>
+      <div *ngIf="totalQuantity > 0">
+        <small><fa-icon [icon]="shoppingCartIcon"></fa-icon> {{ totalQuantity }} Items</small>
+      </div>
+    </button>
+    <button class="btn btn-sm border border-primary" [routerLink]="['/account/history']">
+      <div><fa-icon [icon]="history"></fa-icon> Purchase History</div>
+      <div>
+        <small><fa-icon [icon]="receipt"></fa-icon> Orders & Refunds</small>
+      </div>
+    </button>
+  </div>
+</nav>

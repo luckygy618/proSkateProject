@@ -1,0 +1,35 @@
+<section *ngIf="isDefined(product)" class="row">
+  <div class="col-md-2">
+    <img
+      src="{{ imageUrl + '/' + product.image }}"
+      alt="{{ product.product_name }}"
+      class="img-fluid"
+    />
+  </div>
+  <div class="col-md-8">
+    <h1 class="h4">
+      <a [routerLink]="['/product/' + product.product_id]">{{ product.product_name }}</a>
+      <small *ngIf="orderItem.quantity > 1"> x {{ orderItem.quantity }}</small>
+    </h1>
+    <button
+      *ngIf="orderItem.quantity > 1"
+      [disabled]="product.stock_amount < orderItem.quantity"
+      (click)="onClickBuyAgain(orderItem.quantity)"
+      class="btn btn-sm btn-primary mr-2"
+    >
+      <fa-icon [icon]="shoppingCartIcon"></fa-icon> Buy {{ orderItem.quantity }} Again
+    </button>
+    <button
+      [disabled]="product.stock_amount == 0"
+      (click)="onClickBuyAgain(1)"
+      class="btn btn-sm btn-primary"
+    >
+      <fa-icon [icon]="shoppingCartIcon"></fa-icon> Buy 1 Again
+    </button>
+  </div>
+  <div class="col-md-2">
+    <h2 class="h5 text-right">
+      <strong>${{ orderItem.linetotal.toFixed(2) }}</strong>
+    </h2>
+  </div>
+</section>

@@ -1,0 +1,888 @@
+<div class="container-fluid">
+  <div *ngIf="isLoggedIn()" class="row">
+    <div class="col-md-3">
+      <app-customer-account-menu [active]="'settings'"></app-customer-account-menu>
+    </div>
+    <div class="col-md-9">
+      <section class="rounded shadow-sm p-3">
+        <h1 class="h3 text-center"><fa-icon [icon]="userCog"></fa-icon> Account Settings</h1>
+        <form
+          *ngIf="account != undefined && accountSettingsForm != undefined"
+          [formGroup]="accountSettingsForm"
+          (ngSubmit)="onSubmit()"
+          method="post"
+        >
+          <div class="form-group">
+            <div class="row">
+              <div class="col-xs-12 col-md-6">
+                <h2 class="h5 mt-3">
+                  <fa-icon [icon]="user"></fa-icon> Personal Information Settings
+                </h2>
+                <!--Form validation for salutation BEGIN-->
+                <div
+                  *ngIf="
+                    (accountSettingsForm.get('salutation').invalid &&
+                      accountSettingsForm.get('salutation').touched) ||
+                    accountSettingsForm.get('salutation').dirty
+                  "
+                >
+                  <div *ngIf="accountSettingsForm.get('salutation').errors?.minlength">
+                    <app-form-error
+                      [displayError]="isFieldValid('salutation')"
+                      errorMsg="Your salutation must be at least 3 characters"
+                    >
+                    </app-form-error>
+                  </div>
+                  <div *ngIf="accountSettingsForm.get('salutation').errors?.maxlength">
+                    <app-form-error
+                      [displayError]="isFieldValid('salutation')"
+                      errorMsg="Your salutation must be at most 6 characters"
+                    >
+                    </app-form-error>
+                  </div>
+                  <div *ngIf="accountSettingsForm.get('salutation').errors?.pattern">
+                    <app-form-error
+                      [displayError]="isFieldValid('salutation')"
+                      errorMsg="Please enter a valid salutation"
+                    >
+                    </app-form-error>
+                  </div>
+                </div>
+                <!--Form validation for salutation END-->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="salutation">
+                      <fa-icon [icon]="handShake" class="input-icon"></fa-icon> Salutation:
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="salutation"
+                    formControlName="salutation"
+                    minlength="3"
+                    maxlength="6"
+                    placeholder="Mr./Mrs./Ms./Mx./Dr."
+                    pattern="^[a-zA-Z.]*$"
+                    autofocus
+                  />
+                </div>
+
+                <!--Form validation for first name BEGIN-->
+                <div
+                  *ngIf="
+                    (accountSettingsForm.get('firstName').invalid &&
+                      accountSettingsForm.get('firstName').touched) ||
+                    accountSettingsForm.get('firstName').dirty
+                  "
+                >
+                  <div *ngIf="accountSettingsForm.get('firstName').errors?.minlength">
+                    <app-form-error
+                      [displayError]="isFieldValid('firstName')"
+                      errorMsg="Your first name must be at least 2 characters"
+                    >
+                    </app-form-error>
+                  </div>
+                  <div *ngIf="accountSettingsForm.get('firstName').errors?.maxlength">
+                    <app-form-error
+                      [displayError]="isFieldValid('firstName')"
+                      errorMsg="Your first name must be at most 20 characters"
+                    >
+                    </app-form-error>
+                  </div>
+                  <div *ngIf="accountSettingsForm.get('firstName').errors?.pattern">
+                    <app-form-error
+                      [displayError]="isFieldValid('firstName')"
+                      errorMsg="Please enter a valid first name"
+                    >
+                    </app-form-error>
+                  </div>
+                </div>
+                <!--Form validation for first name END-->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="firstName">
+                      <fa-icon [icon]="userCircle" class="input-icon"></fa-icon> First Name:
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    id="firstName"
+                    class="form-control"
+                    name="firstName"
+                    formControlName="firstName"
+                    minlength="2"
+                    maxlength="20"
+                    placeholder="John"
+                    pattern="^[a-zA-Z]*$"
+                    autofocus
+                  />
+                </div>
+
+                <!--Form validation for last name BEGIN-->
+                <div
+                  *ngIf="
+                    (accountSettingsForm.get('lastName').invalid &&
+                      accountSettingsForm.get('lastName').touched) ||
+                    accountSettingsForm.get('lastName').dirty
+                  "
+                >
+                  <div *ngIf="accountSettingsForm.get('lastName').errors?.minlength">
+                    <app-form-error
+                      [displayError]="isFieldValid('lastName')"
+                      errorMsg="Your last name must be at least 2 characters"
+                    >
+                    </app-form-error>
+                  </div>
+                  <div *ngIf="accountSettingsForm.get('lastName').errors?.maxlength">
+                    <app-form-error
+                      [displayError]="isFieldValid('lastName')"
+                      errorMsg="Your last name must be at most 20 characters"
+                    >
+                    </app-form-error>
+                  </div>
+                  <div *ngIf="accountSettingsForm.get('lastName').errors?.pattern">
+                    <app-form-error
+                      [displayError]="isFieldValid('lastName')"
+                      errorMsg="Please enter a valid last name"
+                    >
+                    </app-form-error>
+                  </div>
+                </div>
+                <!--Form validation for last name END-->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="lastName">
+                      <fa-icon [icon]="userCircle" class="input-icon"></fa-icon> Last Name:
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="lastName"
+                    name="lastName"
+                    formControlName="lastName"
+                    minlength="2"
+                    maxlength="20"
+                    placeholder="Doe"
+                    pattern="^[a-zA-Z]*$"
+                    autofocus
+                  />
+                </div>
+
+                <!--Form validation for phone number BEGIN-->
+                <div
+                  *ngIf="
+                    (accountSettingsForm.get('phoneNumber').invalid &&
+                      accountSettingsForm.get('phoneNumber').touched) ||
+                    accountSettingsForm.get('phoneNumber').dirty
+                  "
+                >
+                  <div *ngIf="accountSettingsForm.get('phoneNumber').errors?.minlength">
+                    <app-form-error
+                      [displayError]="isFieldValid('phoneNumber')"
+                      errorMsg="Your phone number must be at least 12 characters"
+                    >
+                    </app-form-error>
+                  </div>
+                  <div *ngIf="accountSettingsForm.get('phoneNumber').errors?.maxlength">
+                    <app-form-error
+                      [displayError]="isFieldValid('phoneNumber')"
+                      errorMsg="Your phone number must be at most 15 characters"
+                    >
+                    </app-form-error>
+                  </div>
+                  <div *ngIf="accountSettingsForm.get('lastName').errors?.pattern">
+                    <app-form-error
+                      [displayError]="isFieldValid('lastName')"
+                      errorMsg="Please enter a valid phone number"
+                    >
+                    </app-form-error>
+                  </div>
+                </div>
+                <!--Form validation for phone number END-->
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="phoneNumber">
+                      <fa-icon [icon]="phone" class="input-icon"></fa-icon> Phone Number:
+                    </label>
+                  </div>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    formControlName="phoneNumber"
+                    minlength="12"
+                    maxlength="15"
+                    placeholder="416-123-4567"
+                    pattern="^[0-9]{3}-[0-9]{3}-[0-9]{4}$"
+                    autofocus
+                  />
+                </div>
+              </div>
+              <div class="col-xs-12 col-md-6">
+                <h2 class="h5 mt-3"><fa-icon [icon]="addressBook"></fa-icon> Address Settings</h2>
+
+                <h3 class="h6 mt-3"><fa-icon [icon]="shipping"></fa-icon> Shipping Address</h3>
+                <div formGroupName="shippingAddress">
+                  <!--Form validation for address1 BEGIN-->
+                  <div
+                    *ngIf="
+                      (shippingAddressForm.get('address1').invalid &&
+                        shippingAddressForm.get('address1').touched) ||
+                      shippingAddressForm.get('address1').dirty
+                    "
+                  >
+                    <div *ngIf="shippingAddressForm.get('address1').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('address1', shippingAddressForm)"
+                        errorMsg="Your address must be at least 8 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('address1').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('address1', shippingAddressForm)"
+                        errorMsg="Your address must be at most 40 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('address1').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('address1', shippingAddressForm)"
+                        errorMsg="Please enter a valid address"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for address1 END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="shippingAddress1">
+                        <fa-icon [icon]="building" class="input-icon"></fa-icon> Address Line 1:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="shippingAddress1"
+                      name="shippingAddress1"
+                      formControlName="address1"
+                      minlength="8"
+                      maxlength="40"
+                      placeholder="1 Some Place Road"
+                      pattern="^[a-zA-Z0-9 ,.-]*$"
+                      autofocus
+                    />
+                  </div>
+
+                  <!--Form validation for address2 BEGIN-->
+                  <div
+                    *ngIf="
+                      (shippingAddressForm.get('address2').invalid &&
+                        shippingAddressForm.get('address2').touched) ||
+                      shippingAddressForm.get('address2').dirty
+                    "
+                  >
+                    <div *ngIf="shippingAddressForm.get('address2').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('address2', shippingAddressForm)"
+                        errorMsg="Your address must be at least 8 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('address2').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('address2', shippingAddressForm)"
+                        errorMsg="Your address must be at most 40 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('address2').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('address2', shippingAddressForm)"
+                        errorMsg="Please enter a valid address"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for address2 END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="shippingAddress2">
+                        <fa-icon [icon]="building" class="input-icon"></fa-icon> Address Line 2:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="shippingAddress2"
+                      name="shippingAddress2"
+                      formControlName="address2"
+                      minlength="8"
+                      maxlength="40"
+                      placeholder="2 Some Place Road"
+                      pattern="^[a-zA-Z0-9 ,.-]*$"
+                      autofocus
+                    />
+                  </div>
+
+                  <!--Form validation for city BEGIN-->
+                  <div
+                    *ngIf="
+                      (shippingAddressForm.get('city').invalid &&
+                        shippingAddressForm.get('city').touched) ||
+                      shippingAddressForm.get('city').dirty
+                    "
+                  >
+                    <div *ngIf="shippingAddressForm.get('city').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('city', shippingAddressForm)"
+                        errorMsg="Your city must be at least 2 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('city').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('city', shippingAddressForm)"
+                        errorMsg="Your city must be at most 20 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('city').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('city', shippingAddressForm)"
+                        errorMsg="Please enter a valid city"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for city END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="shippingCity">
+                        <fa-icon [icon]="city" class="input-icon"></fa-icon> City:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="shippingCity"
+                      name="shippingCity"
+                      formControlName="city"
+                      minlength="3"
+                      maxlength="20"
+                      placeholder="Toronto"
+                      pattern="^[a-zA-Z ,.-]*$"
+                      autofocus
+                    />
+                  </div>
+
+                  <!--Form validation for province BEGIN-->
+                  <div
+                    *ngIf="
+                      (shippingAddressForm.get('province').invalid &&
+                        shippingAddressForm.get('province').touched) ||
+                      shippingAddressForm.get('province').dirty
+                    "
+                  >
+                    <div *ngIf="shippingAddressForm.get('province').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('province', shippingAddressForm)"
+                        errorMsg="Your province must be at least 2 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('province').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('province', shippingAddressForm)"
+                        errorMsg="Your province must be at most 20 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('province').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('province', shippingAddressForm)"
+                        errorMsg="Please enter a valid province"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for province END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="shippingProvince">
+                        <fa-icon [icon]="map" class="input-icon"></fa-icon> Province:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="shippingProvince"
+                      name="shippingProvince"
+                      formControlName="province"
+                      minlength="2"
+                      maxlength="20"
+                      placeholder="Ontario"
+                      pattern="^[a-zA-Z ,.-]*$"
+                      autofocus
+                    />
+                  </div>
+
+                  <!--Form validation for country BEGIN-->
+                  <div
+                    *ngIf="
+                      (shippingAddressForm.get('country').invalid &&
+                        shippingAddressForm.get('country').touched) ||
+                      shippingAddressForm.get('country').dirty
+                    "
+                  >
+                    <div *ngIf="shippingAddressForm.get('country').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('country', shippingAddressForm)"
+                        errorMsg="Your country must be at least 2 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('country').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('country', shippingAddressForm)"
+                        errorMsg="Your country must be at most 20 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('country').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('country', shippingAddressForm)"
+                        errorMsg="Please enter a valid country"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for country END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="shippingCountry">
+                        <fa-icon [icon]="globe" class="input-icon"></fa-icon> Country:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="shippingCountry"
+                      name="shippingCountry"
+                      formControlName="country"
+                      minlength="2"
+                      maxlength="20"
+                      placeholder="Canada"
+                      pattern="^[a-zA-Z ,.-]*$"
+                      autofocus
+                    />
+                  </div>
+
+                  <!--Form validation for postalCode BEGIN-->
+                  <div
+                    *ngIf="
+                      (shippingAddressForm.get('postalCode').invalid &&
+                        shippingAddressForm.get('postalCode').touched) ||
+                      shippingAddressForm.get('postalCode').dirty
+                    "
+                  >
+                    <div *ngIf="shippingAddressForm.get('postalCode').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('postalCode', shippingAddressForm)"
+                        errorMsg="Your postal code must be at least 6 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('postalCode').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('postalCode', shippingAddressForm)"
+                        errorMsg="Your postal code must be at most 7 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="shippingAddressForm.get('postalCode').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('postalCode', shippingAddressForm)"
+                        errorMsg="Please enter a valid postal code"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for country END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="shippingPostalCode">
+                        <fa-icon [icon]="stamp" class="input-icon"></fa-icon> Postal Code:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="shippingPostalCode"
+                      name="shippingPostalCode"
+                      formControlName="postalCode"
+                      minlength="6"
+                      maxlength="7"
+                      placeholder="A1B 2C3"
+                      pattern="^[a-zA-Z0-9 ]*$"
+                      autofocus
+                    />
+                  </div>
+                </div>
+                <!-- shippingAddress form group END -->
+
+                <h3 class="h6 mt-3"><fa-icon [icon]="invoice"></fa-icon> Billing Address</h3>
+                <div class="form-check mt-3 mb-3">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="useShippingAsBilling"
+                    name="useShippingAsBilling"
+                    formControlName="useShippingAsBilling"
+                  />
+                  <label for="useShippingAsBilling" class="form-check-label">
+                    <fa-icon [icon]="shipping" class="input-icon"></fa-icon>
+                    <fa-icon [icon]="equals" class="input-icon"></fa-icon>
+                    <fa-icon [icon]="invoice" class="input-icon"></fa-icon>
+                    Use Shipping Address as Billing Address?
+                  </label>
+                </div>
+                <div *ngIf="!useShippingAsBilling" formGroupName="billingAddress">
+                  <!--Form validation for address1 BEGIN-->
+                  <div
+                    *ngIf="
+                      (billingAddressForm.get('address1').invalid &&
+                        billingAddressForm.get('address1').touched) ||
+                      billingAddressForm.get('address1').dirty
+                    "
+                  >
+                    <div *ngIf="billingAddressForm.get('address1').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('address1', billingAddressForm)"
+                        errorMsg="Your address must be at least 8 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('address1').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('address1', billingAddressForm)"
+                        errorMsg="Your address must be at most 40 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div
+                      *ngIf="
+                        accountSettingsForm.get('billingAddress').get('address1').errors?.pattern
+                      "
+                    >
+                      <app-form-error
+                        [displayError]="isFieldValid('address1', billingAddressForm)"
+                        errorMsg="Please enter a valid address"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for address1 END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="billingAddress1">
+                        <fa-icon [icon]="building" class="input-icon"></fa-icon> Address Line 1:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="billingAddress1"
+                      name="billingAddress1"
+                      formControlName="address1"
+                      minlength="8"
+                      maxlength="40"
+                      placeholder="1 Some Place Road"
+                      pattern="^[a-zA-Z0-9 ,.-]*$"
+                      autofocus
+                    />
+                  </div>
+
+                  <!--Form validation for address2 BEGIN-->
+                  <div
+                    *ngIf="
+                      (billingAddressForm.get('address2').invalid &&
+                        billingAddressForm.get('address2').touched) ||
+                      billingAddressForm.get('address2').dirty
+                    "
+                  >
+                    <div *ngIf="billingAddressForm.get('address2').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('address2', billingAddressForm)"
+                        errorMsg="Your address must be at least 8 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('address2').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('address2', billingAddressForm)"
+                        errorMsg="Your address must be at most 40 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('address2').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('address2', billingAddressForm)"
+                        errorMsg="Please enter a valid address"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for address2 END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="billingAddress2">
+                        <fa-icon [icon]="building" class="input-icon"></fa-icon> Address Line 2:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="billingAddress2"
+                      name="billingAddress2"
+                      formControlName="address2"
+                      minlength="8"
+                      maxlength="40"
+                      placeholder="2 Some Place Road"
+                      pattern="^[a-zA-Z0-9 ,.-]*$"
+                      autofocus
+                    />
+                  </div>
+
+                  <!--Form validation for city BEGIN-->
+                  <div
+                    *ngIf="
+                      (billingAddressForm.get('city').invalid &&
+                        billingAddressForm.get('city').touched) ||
+                      billingAddressForm.get('city').dirty
+                    "
+                  >
+                    <div *ngIf="billingAddressForm.get('city').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('city', billingAddressForm)"
+                        errorMsg="Your city must be at least 2 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('city').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('city', billingAddressForm)"
+                        errorMsg="Your city must be at most 20 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('city').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('city', billingAddressForm)"
+                        errorMsg="Please enter a valid city"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for city END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="billingCity">
+                        <fa-icon [icon]="city" class="input-icon"></fa-icon> City:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="billingCity"
+                      name="billingCity"
+                      formControlName="city"
+                      minlength="3"
+                      maxlength="20"
+                      placeholder="Toronto"
+                      pattern="^[a-zA-Z ,.-]*$"
+                      autofocus
+                    />
+                  </div>
+
+                  <!--Form validation for province BEGIN-->
+                  <div
+                    *ngIf="
+                      (billingAddressForm.get('province').invalid &&
+                        billingAddressForm.get('province').touched) ||
+                      billingAddressForm.get('province').dirty
+                    "
+                  >
+                    <div *ngIf="billingAddressForm.get('province').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('province', billingAddressForm)"
+                        errorMsg="Your province must be at least 2 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('province').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('province', billingAddressForm)"
+                        errorMsg="Your province must be at most 20 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('province').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('province', billingAddressForm)"
+                        errorMsg="Please enter a valid province"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for province END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="billingProvince">
+                        <fa-icon [icon]="map" class="input-icon"></fa-icon> Province:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="billingProvince"
+                      name="billingProvince"
+                      formControlName="province"
+                      minlength="2"
+                      maxlength="20"
+                      placeholder="Ontario"
+                      pattern="^[a-zA-Z ,.-]*$"
+                      autofocus
+                    />
+                  </div>
+
+                  <!--Form validation for country BEGIN-->
+                  <div
+                    *ngIf="
+                      (billingAddressForm.get('country').invalid &&
+                        billingAddressForm.get('country').touched) ||
+                      billingAddressForm.get('country').dirty
+                    "
+                  >
+                    <div *ngIf="billingAddressForm.get('country').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('country', billingAddressForm)"
+                        errorMsg="Your country must be at least 2 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('country').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('country', billingAddressForm)"
+                        errorMsg="Your country must be at most 20 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('country').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('country', billingAddressForm)"
+                        errorMsg="Please enter a valid country"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for country END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="billingCountry">
+                        <fa-icon [icon]="globe" class="input-icon"></fa-icon> Country:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="billingCountry"
+                      name="billingCountry"
+                      formControlName="country"
+                      minlength="2"
+                      maxlength="20"
+                      placeholder="Canada"
+                      pattern="^[a-zA-Z ,.-]*$"
+                      autofocus
+                    />
+                  </div>
+
+                  <!--Form validation for postalCode BEGIN-->
+                  <div
+                    *ngIf="
+                      (billingAddressForm.get('postalCode').invalid &&
+                        billingAddressForm.get('postalCode').touched) ||
+                      accountSettingsForm.get('billingAddress').get('postalCode').dirty
+                    "
+                  >
+                    <div *ngIf="billingAddressForm.get('postalCode').errors?.minlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('postalCode', billingAddressForm)"
+                        errorMsg="Your postal code must be at least 6 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('postalCode').errors?.maxlength">
+                      <app-form-error
+                        [displayError]="isFieldValid('postalCode', billingAddressForm)"
+                        errorMsg="Your postal code must be at most 7 characters"
+                      >
+                      </app-form-error>
+                    </div>
+                    <div *ngIf="billingAddressForm.get('postalCode').errors?.pattern">
+                      <app-form-error
+                        [displayError]="isFieldValid('postalCode', billingAddressForm)"
+                        errorMsg="Please enter a valid postal code"
+                      >
+                      </app-form-error>
+                    </div>
+                  </div>
+                  <!--Form validation for country END-->
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="billingPostalCode">
+                        <fa-icon [icon]="stamp" class="input-icon"></fa-icon> Postal Code:
+                      </label>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="billingPostalCode"
+                      name="billingPostalCode"
+                      formControlName="postalCode"
+                      minlength="6"
+                      maxlength="7"
+                      placeholder="A1B 2C3"
+                      pattern="^[a-zA-Z0-9 ]*$"
+                      autofocus
+                    />
+                  </div>
+                </div>
+                <!-- shippingAddress form group END -->
+              </div>
+            </div>
+          </div>
+
+          <button type="reset" class="btn btn-primary">
+            <fa-icon [icon]="trash" class="input-icon"></fa-icon> Clear Form
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary float-right"
+            [disabled]="!accountSettingsForm.valid"
+          >
+            <fa-icon [icon]="userEdit" class="input-icon"></fa-icon> Save Settings
+          </button>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <section *ngIf="!isLoggedIn()">
+    <app-alert [display]="!isLoggedIn()" type="info" message="Please login to view this page.">
+    </app-alert>
+  </section>
+</div>

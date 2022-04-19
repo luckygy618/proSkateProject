@@ -1,0 +1,221 @@
+<form [formGroup]="updatePaymentForm" (ngSubmit)="onSubmit()" method="post">
+  <div class="form-group">
+    <!--Form validation for number BEGIN-->
+    <div
+      *ngIf="
+        (updatePaymentForm.get('number').invalid && updatePaymentForm.get('number').touched) ||
+        updatePaymentForm.get('number').dirty
+      "
+    >
+      <div *ngIf="updatePaymentForm.get('number').errors?.required">
+        <app-form-error
+          [displayError]="isFieldValid('number')"
+          errorMsg="Please enter a card number"
+        >
+        </app-form-error>
+      </div>
+      <div *ngIf="updatePaymentForm.get('number').errors?.minlength">
+        <app-form-error
+          [displayError]="isFieldValid('number')"
+          errorMsg="The credit card number must be at least 13 characters"
+        >
+        </app-form-error>
+      </div>
+      <div *ngIf="updatePaymentForm.get('number').errors?.pattern">
+        <app-form-error
+          [displayError]="isFieldValid('number')"
+          errorMsg="Please enter a valid credit card number"
+        >
+        </app-form-error>
+      </div>
+    </div>
+    <!--Form validation for number END-->
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="number">
+          <fa-icon [icon]="creditCardBack" class="input-icon"></fa-icon> Card number:
+        </label>
+      </div>
+      <input
+        type="tel"
+        class="form-control"
+        id="number"
+        name="number"
+        formControlName="number"
+        placeholder="1234 5678 9012 3456"
+        required
+        minlength="13"
+        maxlength="19"
+        pattern="^[0-9\s]{13,19}$"
+      />
+    </div>
+
+    <!--Form validation for exp_month BEGIN-->
+    <div
+      *ngIf="
+        (updatePaymentForm.get('exp_month').invalid &&
+          updatePaymentForm.get('exp_month').touched) ||
+        updatePaymentForm.get('exp_month').dirty
+      "
+    >
+      <div *ngIf="updatePaymentForm.get('exp_month').errors?.required">
+        <app-form-error
+          [displayError]="isFieldValid('exp_month')"
+          errorMsg="Please enter an expiry month"
+        >
+        </app-form-error>
+      </div>
+      <div *ngIf="updatePaymentForm.get('exp_month').errors?.minlength">
+        <app-form-error
+          [displayError]="isFieldValid('exp_month')"
+          errorMsg="Expiry month must be at least 1 character"
+        >
+        </app-form-error>
+      </div>
+      <div *ngIf="updatePaymentForm.get('exp_month').errors?.pattern">
+        <app-form-error
+          [displayError]="isFieldValid('exp_month')"
+          errorMsg="Please enter a valid expiry month"
+        >
+        </app-form-error>
+      </div>
+    </div>
+    <!--Form validation for exp_month END-->
+
+    <!--Form validation for exp_year BEGIN-->
+    <div
+      *ngIf="
+        (updatePaymentForm.get('exp_year').invalid && updatePaymentForm.get('exp_year').touched) ||
+        updatePaymentForm.get('exp_year').dirty
+      "
+    >
+      <div *ngIf="updatePaymentForm.get('exp_year').errors?.required">
+        <app-form-error
+          [displayError]="isFieldValid('exp_year')"
+          errorMsg="Please enter an expiry year"
+        >
+        </app-form-error>
+      </div>
+      <div *ngIf="updatePaymentForm.get('exp_year').errors?.minlength">
+        <app-form-error
+          [displayError]="isFieldValid('exp_year')"
+          errorMsg="Expiry year must be at least 4 characters"
+        >
+        </app-form-error>
+      </div>
+      <div *ngIf="updatePaymentForm.get('exp_year').errors?.pattern">
+        <app-form-error
+          [displayError]="isFieldValid('exp_year')"
+          errorMsg="Please enter a valid expiry year"
+        >
+        </app-form-error>
+      </div>
+    </div>
+    <!--Form validation for exp_year END-->
+
+    <!--Form validation for CVC BEGIN-->
+    <div
+      *ngIf="
+        (updatePaymentForm.get('cvc').invalid && updatePaymentForm.get('cvc').touched) ||
+        updatePaymentForm.get('cvc').dirty
+      "
+    >
+      <div *ngIf="updatePaymentForm.get('cvc').errors?.required">
+        <app-form-error
+          [displayError]="isFieldValid('cvc')"
+          errorMsg="Please enter the 3-digit CVC security code number on the back of your card"
+        >
+        </app-form-error>
+      </div>
+      <div *ngIf="updatePaymentForm.get('cvc').errors?.minlength">
+        <app-form-error
+          [displayError]="isFieldValid('cvc')"
+          errorMsg="CVC must be at least 3 numbers"
+        >
+        </app-form-error>
+      </div>
+      <div *ngIf="updatePaymentForm.get('cvc').errors?.pattern">
+        <app-form-error
+          [displayError]="isFieldValid('cvc')"
+          errorMsg="Please enter a valid CVC code"
+        >
+        </app-form-error>
+      </div>
+    </div>
+    <!--Form validation for CVC END-->
+
+    <div class="row">
+      <div class="col-xs-12 col-md-4">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="exp_month">
+              <fa-icon [icon]="calendar" class="input-icon"></fa-icon> Expiry Month:
+            </label>
+          </div>
+          <input
+            type="tel"
+            class="form-control"
+            id="exp_month"
+            name="exp_month"
+            formControlName="exp_month"
+            placeholder="MM"
+            required
+            minlength="1"
+            maxlength="2"
+            pattern="^[0-9]{1,2}$"
+          />
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-4">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="exp_year">
+              <fa-icon [icon]="calendarAlt" class="input-icon"></fa-icon> Expiry Year:
+            </label>
+          </div>
+          <input
+            type="tel"
+            class="form-control"
+            id="exp_year"
+            name="exp_year"
+            formControlName="exp_year"
+            placeholder="YYYY"
+            required
+            minlength="4"
+            maxlength="4"
+            pattern="^[0-9]{4}$"
+          />
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-4">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="cvc">
+              <fa-icon [icon]="creditCardBack" class="input-icon"></fa-icon> CVC:
+            </label>
+          </div>
+          <input
+            type="tel"
+            class="form-control"
+            id="cvc"
+            name="cvc"
+            formControlName="cvc"
+            placeholder="000"
+            required
+            minlength="3"
+            maxlength="4"
+            pattern="^[0-9]{3,4}$"
+          />
+        </div>
+      </div>
+    </div>
+
+    <button type="reset" class="btn btn-primary">
+      <fa-icon [icon]="trash" class="input-icon"></fa-icon> Clear Form
+    </button>
+    <button type="submit" class="btn btn-primary float-right" [disabled]="!updatePaymentForm.valid">
+      <fa-icon [icon]="userEdit" class="input-icon"></fa-icon> Update Payment
+    </button>
+  </div>
+</form>

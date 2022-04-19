@@ -1,0 +1,41 @@
+<article class="row justify-content-center">
+  <div class="col-md-10">
+    <div *ngIf="accountDefined">
+      <app-alert
+        [display]="isDefined(loginSuccess)"
+        type="success"
+        message="Successfully logged in to account with email address {{ account.email }}!"
+      >
+      </app-alert>
+    </div>
+    <div *ngIf="!accountDefined">
+      <app-alert
+        [display]="isDefined(loginSuccess)"
+        type="success"
+        message="Successfully logged in to account!"
+      >
+      </app-alert>
+    </div>
+    <app-alert [display]="isDefined(loginError)" type="error" message="Error: {{ loginError }}">
+    </app-alert>
+
+    <h1 class="h2 text-success text-center mb-3">
+      <fa-icon [icon]="check"></fa-icon> Order Confirmation
+    </h1>
+    <app-login-register></app-login-register>
+    <div *ngIf="isLoggedIn">
+      <section class="border border-success rounded shadow p-3 mb-4">
+        <h1 class="h3 text-success">Thank you for shopping with ProSkaters Place!</h1>
+        <h2 class="h4 text-success">
+          <fa-icon [icon]="stripe"></fa-icon> Your payment was successfully processed and your order
+          has been placed.
+        </h2>
+        <h3 *ngIf="accountDefined" class="h4 text-success">
+          <fa-icon [icon]="envelope"></fa-icon> An email has been sent to
+          <strong>{{ account.email }}</strong> with your order confirmation and receipt.
+        </h3>
+      </section>
+      <app-receipt></app-receipt>
+    </div>
+  </div>
+</article>

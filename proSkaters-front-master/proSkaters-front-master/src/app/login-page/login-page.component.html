@@ -1,0 +1,29 @@
+<section *ngIf="isLoggedIn">
+  <div class="row justify-content-md-center">
+    <div class="col-md-6">
+      <app-alert
+        [display]="isLoggedIn"
+        type="success"
+        message="Successfully logged in to account with email address {{ email }}!"
+      >
+      </app-alert>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="!isLoggedIn">
+  <div class="row justify-content-md-center">
+    <div class="col-md-6">
+      <div *ngIf="registerSuccess != undefined">
+        <app-alert
+          [display]="registerSuccess != undefined"
+          type="success"
+          message="{{ registerSuccess }}"
+        >
+        </app-alert>
+      </div>
+
+      <app-login></app-login>
+    </div>
+  </div>
+</section>

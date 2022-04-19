@@ -1,0 +1,46 @@
+<article class="row">
+  <div class="col-md-9">
+    <app-alert
+      [display]="shoppingCartSuccess != undefined"
+      type="success"
+      message="{{ shoppingCartSuccess }}"
+    >
+    </app-alert>
+    <app-alert
+      [display]="shoppingCartError != undefined"
+      type="error"
+      message="{{ shoppingCartError }}"
+    >
+    </app-alert>
+
+    <h1 class="h2 text-center mb-3"><fa-icon [icon]="shoppingCartIcon"></fa-icon> Shopping Cart</h1>
+    <app-shopping-cart
+      (successEvent)="shoppingCartSuccess = $event"
+      (errorEvent)="shoppingCartError = $event"
+    ></app-shopping-cart>
+  </div>
+  <div class="col-md-3">
+    <section id="checkout-panel" class="border border-primary rounded shadow p-3">
+      <h1 class="h4"><fa-icon [icon]="cashRegister"></fa-icon> Checkout</h1>
+      <h2 class="h5">
+        <fa-icon [icon]="calculator"></fa-icon> Subtotal ({{ totalQuantity }} item<span
+          *ngIf="totalQuantity != 1"
+          >s</span
+        >): <strong>${{ subtotal.toFixed(2) }}</strong>
+      </h2>
+      <button
+        (click)="onClickCheckout()"
+        [disabled]="cartEmpty"
+        class="btn btn-primary btn-block mb-3"
+      >
+        <fa-icon [icon]="cashRegister"></fa-icon> Proceed to Checkout
+      </button>
+      <app-alert
+        [display]="cartEmpty"
+        type="info"
+        message="Add something to your cart to checkout."
+      >
+      </app-alert>
+    </section>
+  </div>
+</article>

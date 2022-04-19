@@ -1,0 +1,26 @@
+<section *ngIf="cartEmpty" class="row justify-content-md-center">
+  <div class="col-md-6">
+    <app-alert [display]="cartEmpty" type="info" message="Your shopping cart is empty.">
+    </app-alert>
+  </div>
+</section>
+
+<section *ngIf="!cartEmpty">
+  <h2 class="h5 text-right"><fa-icon [icon]="dollarSign"></fa-icon> Price:</h2>
+  <ul class="list-group">
+    <li *ngFor="let item of items; let i = index" class="list-group-item">
+      <app-cart-item
+        [cartItem]="item"
+        [cartIndex]="i"
+        (successEvent)="successEvent.emit($event)"
+        (errorEvent)="errorEvent.emit($event)"
+      ></app-cart-item>
+    </li>
+  </ul>
+  <h2 class="h5 text-right mt-3">
+    <fa-icon [icon]="calculator"></fa-icon> Subtotal ({{ totalQuantity }} item<span
+      *ngIf="totalQuantity != 1"
+      >s</span
+    >): <strong>${{ subtotal.toFixed(2) }}</strong>
+  </h2>
+</section>

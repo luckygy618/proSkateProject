@@ -1,0 +1,32 @@
+<nav *ngIf="isLoggedIn()" class="list-group shadow" id="customer-account-menu">
+  <a
+    class="list-group-item list-group-item-action border border-primary"
+    [ngClass]="{ active: active == 'info' }"
+    [routerLink]="['/account']"
+    ><fa-icon [icon]="userCheck"></fa-icon> Account Information</a
+  >
+  <a
+    class="list-group-item list-group-item-action border border-primary"
+    [ngClass]="{ active: active == 'settings' }"
+    [routerLink]="['/account/settings']"
+    ><fa-icon [icon]="userCog"></fa-icon> Account Settings</a
+  >
+  <a
+    class="list-group-item list-group-item-action border border-primary"
+    [ngClass]="{ active: active == 'password' }"
+    [routerLink]="['/account/settings/password']"
+    ><fa-icon [icon]="userLock"></fa-icon> Update Password</a
+  >
+  <a
+    class="list-group-item list-group-item-action border border-primary"
+    [ngClass]="{ active: active == 'payment' }"
+    [routerLink]="['/account/settings/payment']"
+    ><fa-icon [icon]="stripe"></fa-icon> Update Payment Information</a
+  >
+  <a
+    class="list-group-item list-group-item-action border border-primary"
+    [ngClass]="{ active: active == 'history' }"
+    [routerLink]="['/account/history']"
+    ><fa-icon [icon]="history"></fa-icon> View Purchase History</a
+  >
+</nav>

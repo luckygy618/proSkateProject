@@ -1,0 +1,144 @@
+<article class="product row" *ngIf="product != undefined">
+  <section class="col-sm-12 col-md-4">
+    <img
+      *ngIf="isDefined(product)"
+      src="{{ imageUrl + '/' + product.image }}"
+      alt="{{ product.product_name }}"
+      class="img-fluid"
+    />
+  </section>
+
+  <section class="col-sm-12 col-md-5">
+    <h1 class="h3">{{ product.product_name }}</h1>
+    <div *ngIf="product.rating" class="text-warning">
+      <fa-icon *ngFor="let num of starArray; let i = index" [icon]="star"></fa-icon>
+    </div>
+    <h2>${{ product.price }}</h2>
+    <p class="formatted-text" [innerHTML]="product.intro | replaceLineBreaks"></p>
+    <p class="formatted-text" [innerHTML]="product.description | replaceLineBreaks"></p>
+    <h3 class="h6">Additional Information</h3>
+    <ul class="list-group">
+      <li class="list-group-item">SKU: {{ product.sku }}</li>
+      <li class="list-group-item">Brand: {{ product.brand }}</li>
+    </ul>
+  </section>
+
+  <div class="col-sm-12 col-md-3">
+    <section id="add-to-cart-panel" class="border border-primary rounded shadow p-3">
+      <h1>${{ product.price }}</h1>
+      <p *ngIf="account != undefined">
+        <span *ngIf="isDefined(account.shippingAddress)">
+          <fa-icon [icon]="mapMarker"></fa-icon> Deliver to
+          <span *ngIf="isDefined(account.firstName) && isDefined(account.lastName)">
+            <span *ngIf="isDefined(account.salutation)">
+              {{ account.salutation }}
+            </span>
+            {{ account.firstName }} {{ account.lastName }},
+          </span>
+          <span *ngIf="isDefined(account.shippingAddress.address1)">
+            {{ account.shippingAddress.address1 }},
+          </span>
+          <span *ngIf="isDefined(account.shippingAddress.address2)">
+            {{ account.shippingAddress.address2 }},
+          </span>
+          <span *ngIf="isDefined(account.shippingAddress.city)">
+            {{ account.shippingAddress.city }},
+          </span>
+          <span *ngIf="isDefined(account.shippingAddress.province)">
+            {{ account.shippingAddress.province }},
+          </span>
+          <span *ngIf="isDefined(account.shippingAddress.country)">
+            {{ account.shippingAddress.country }},
+          </span>
+          <span *ngIf="isDefined(account.shippingAddress.postalCode)">
+            {{ account.shippingAddress.postalCode }}
+          </span>
+        </span>
+        <br />(<a [routerLink]="['/account/settings']">Update Shipping Address</a>)
+      </p>
+
+      <app-alert
+        [display]="product.stock_amount == 0"
+        type="warning"
+        message="{{ product.product_name }} is out of stock."
+      ></app-alert>
+      <app-alert
+        [display]="product.stock_amount > 0"
+        type="success"
+        message="{{ product.stock_amount }} left in stock."
+      ></app-alert>
+
+      <form *ngIf="product.stock_amount > 0" [formGroup]="addToCartForm" (ngSubmit)="onSubmit()">
+        <app-alert
+          [display]="addToCartError != undefined"
+          type="error"
+          message="Error: {{ addToCartError }}"
+        >
+        </app-alert>
+        <!--Form validation for quantity BEGIN-->
+        <div
+          *ngIf="
+            (addToCartForm.get('quantity').invalid && addToCartForm.get('quantity').touched) ||
+            addToCartForm.get('quantity').dirty
+          "
+        >
+          <div *ngIf="addToCartForm.get('quantity').errors?.required">
+            <app-form-error
+              [displayError]="isFieldValid('quantity')"
+              errorMsg="Please enter a quantity greater than 0."
+            >
+            </app-form-error>
+          </div>
+          <div *ngIf="addToCartForm.get('quantity').errors?.minlength">
+            <app-form-error
+              [displayError]="isFieldValid('quantity')"
+              errorMsg="Your quantity must be at least 1 digit"
+            >
+            </app-form-error>
+          </div>
+          <div *ngIf="addToCartForm.get('quantity').errors?.maxlength">
+            <app-form-error
+              [displayError]="isFieldValid('quantity')"
+              errorMsg="Your quantity must be at most 2 digits"
+            >
+            </app-form-error>
+          </div>
+          <div *ngIf="addToCartForm.get('quantity').errors?.pattern">
+            <app-form-error
+              [displayError]="isFieldValid('quantity')"
+              errorMsg="Please enter a valid quantity"
+            >
+            </app-form-error>
+          </div>
+        </div>
+        <!--Form validation for quantity END-->
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label for="quantity" class="input-group-text"
+              ><fa-icon [icon]="numericUp" class="input-icon"></fa-icon> Quantity:</label
+            >
+          </div>
+          <select
+            name="quantity"
+            formControlName="quantity"
+            id="quantity"
+            class="form-control"
+            required
+            minlength="1"
+            maxlength="2"
+            pattern="^[0-9]{1,2}$"
+          >
+            <option *ngFor="let amount of stockArray" value="{{ amount }}">{{ amount }}</option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          [disabled]="!addToCartForm.valid"
+          class="btn btn-primary btn-block mb-3"
+        >
+          <fa-icon [icon]="shoppingCartIcon"></fa-icon> Add to Cart
+        </button>
+      </form>
+    </section>
+  </div>
+</article>

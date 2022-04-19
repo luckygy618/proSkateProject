@@ -1,0 +1,490 @@
+<section *ngIf="isLoggedIn" class="rounded shadow-sm p-3">
+  <div *ngIf="addProductSuccess != undefined">
+    <app-alert
+      [display]="addProductSuccess != undefined"
+      type="success"
+      message="Add Product Success: {{ addProductSuccess }}"
+    >
+    </app-alert>
+  </div>
+  <div *ngIf="addProductError != undefined">
+    <app-alert
+      [display]="addProductError != undefined"
+      type="error"
+      message="Add Product Error: {{ addProductError }}"
+    >
+    </app-alert>
+  </div>
+  <div *ngIf="uploadImageSuccess != undefined">
+    <app-alert
+      [display]="uploadImageSuccess != undefined"
+      type="success"
+      message="Image Upload Success: {{ uploadImageSuccess }}"
+    >
+    </app-alert>
+  </div>
+  <div *ngIf="uploadImageError != undefined">
+    <app-alert
+      [display]="uploadImageError != undefined"
+      type="error"
+      message="Image Upload Error: {{ uploadImageError }}"
+    >
+    </app-alert>
+  </div>
+
+  <h1 class="h3 text-center mb-3">Add Product Form</h1>
+  <form
+    [formGroup]="productForm"
+    (ngSubmit)="onSubmit()"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
+          <!--Form validation for productId BEGIN-->
+          <div
+            *ngIf="
+              (productForm.get('productId').invalid && productForm.get('productId').touched) ||
+              productForm.get('productId').dirty
+            "
+          >
+            <div *ngIf="productForm.get('productId').errors?.required">
+              <app-form-error
+                [displayError]="isFieldValid('productId')"
+                errorMsg="Please enter a product ID"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('productId').errors?.minlength">
+              <app-form-error
+                [displayError]="isFieldValid('productId')"
+                errorMsg="Your product ID must be at least 1 character"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('productId').errors?.pattern">
+              <app-form-error
+                [displayError]="isFieldValid('productId')"
+                errorMsg="Please enter a valid product ID"
+              >
+              </app-form-error>
+            </div>
+          </div>
+          <!--Form validation for productId END-->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="productId">Product ID: </label>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="productId"
+              formControlName="productId"
+              required
+              minlength="1"
+              pattern="^[a-zA-Z0-9 ,.-]*$"
+              autofocus
+            />
+          </div>
+          <!--Form validation for productName BEGIN-->
+          <div
+            *ngIf="
+              (productForm.get('productName').invalid && productForm.get('productName').touched) ||
+              productForm.get('productName').dirty
+            "
+          >
+            <div *ngIf="productForm.get('productName').errors?.required">
+              <app-form-error
+                [displayError]="isFieldValid('productName')"
+                errorMsg="Please enter a product name"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('productName').errors?.minlength">
+              <app-form-error
+                [displayError]="isFieldValid('productName')"
+                errorMsg="Your product name must be at least 2 characters"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('productName').errors?.pattern">
+              <app-form-error
+                [displayError]="isFieldValid('productName')"
+                errorMsg="Please enter a valid product name"
+              >
+              </app-form-error>
+            </div>
+          </div>
+          <!--Form validation for productName END-->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="productName">Name: </label>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="productName"
+              formControlName="productName"
+              required
+              minlength="2"
+              pattern="^[a-zA-Z0-9 ,.-]*$"
+              [ngClass]="displayFieldCss('productName')"
+            />
+          </div>
+          <!--Form validation for price BEGIN-->
+          <div
+            *ngIf="
+              (productForm.get('price').invalid && productForm.get('price').touched) ||
+              productForm.get('price').dirty
+            "
+          >
+            <div *ngIf="productForm.get('price').errors?.required">
+              <app-form-error
+                [displayError]="isFieldValid('price')"
+                errorMsg="Please enter a price"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('price').errors?.minlength">
+              <app-form-error
+                [displayError]="isFieldValid('price')"
+                errorMsg="Your price must be at least 1 character"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('price').errors?.pattern">
+              <app-form-error
+                [displayError]="isFieldValid('price')"
+                errorMsg="Please enter a valid price"
+              >
+              </app-form-error>
+            </div>
+          </div>
+          <!--Form validation for price END-->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="price">Price: </label>
+            </div>
+            <input
+              type="number"
+              class="form-control"
+              name="price"
+              formControlName="price"
+              step="0.01"
+              min="1"
+              required
+            />
+          </div>
+          <!--Form validation for stockAmount BEGIN-->
+          <div
+            *ngIf="
+              (productForm.get('stockAmount').invalid && productForm.get('stockAmount').touched) ||
+              productForm.get('stockAmount').dirty
+            "
+          >
+            <div *ngIf="productForm.get('stockAmount').errors?.pattern">
+              <app-form-error
+                [displayError]="isFieldValid('stockAmount')"
+                errorMsg="Please enter a valid stockAmount"
+              >
+              </app-form-error>
+            </div>
+          </div>
+          <!--Form validation for stockAmount END-->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="stockAmount">Stock Amount: </label>
+            </div>
+            <input
+              type="number"
+              class="form-control"
+              name="stock_amount"
+              min="0"
+              formControlName="stockAmount"
+              pattern="^[a-zA-Z0-9 ,.-]*$"
+            />
+          </div>
+          <!--Form validation for stockStatus BEGIN-->
+          <div
+            *ngIf="
+              (productForm.get('stockStatus').invalid && productForm.get('stockStatus').touched) ||
+              productForm.get('stockStatus').dirty
+            "
+          >
+            <div *ngIf="productForm.get('stockStatus').errors?.pattern">
+              <app-form-error
+                [displayError]="isFieldValid('stockStatus')"
+                errorMsg="Please enter a valid stockStatus"
+              >
+              </app-form-error>
+            </div>
+          </div>
+          <!--Form validation for stockStatus END-->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="stockStatus">Stock Status: </label>
+            </div>
+            <select
+              name="stockStatus"
+              name="stockStatus"
+              formControlName="stockStatus"
+              pattern="^[a-zA-Z0-9 ,.-]*$"
+            >
+              <option value="Out of stock">Out of stock</option>
+              <option value="In stock">In stock</option>
+            </select>
+          </div>
+          <!--Form validation for sku BEGIN-->
+          <div
+            *ngIf="
+              (productForm.get('sku').invalid && productForm.get('sku').touched) ||
+              productForm.get('sku').dirty
+            "
+          >
+            <div *ngIf="productForm.get('sku').errors?.required">
+              <app-form-error [displayError]="isFieldValid('sku')" errorMsg="Please enter a sku">
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('sku').errors?.minlength">
+              <app-form-error
+                [displayError]="isFieldValid('sku')"
+                errorMsg="Your sku must be at least 1 character"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('sku').errors?.pattern">
+              <app-form-error
+                [displayError]="isFieldValid('sku')"
+                errorMsg="Please enter a valid sku"
+              >
+              </app-form-error>
+            </div>
+          </div>
+          <!--Form validation for sku END-->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="sku">SKU#: </label>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="sku"
+              formControlName="sku"
+              required
+              minlength="1"
+              pattern="^[a-zA-Z0-9 ,.-]*$"
+            />
+          </div>
+          <!--Form validation for brand BEGIN-->
+          <div
+            *ngIf="
+              (productForm.get('brand').invalid && productForm.get('brand').touched) ||
+              productForm.get('brand').dirty
+            "
+          >
+            <div *ngIf="productForm.get('brand').errors?.required">
+              <app-form-error
+                [displayError]="isFieldValid('brand')"
+                errorMsg="Please enter a brand"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('brand').errors?.minlength">
+              <app-form-error
+                [displayError]="isFieldValid('brand')"
+                errorMsg="Your brand must be at least 2 characters"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('brand').errors?.pattern">
+              <app-form-error
+                [displayError]="isFieldValid('brand')"
+                errorMsg="Please enter a valid brand"
+              >
+              </app-form-error>
+            </div>
+          </div>
+          <!--Form validation for sku END-->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="brand">Brand: </label>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="brand"
+              formControlName="brand"
+              required
+              minlength="2"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <!--Form validation for image BEGIN-->
+          <div
+            *ngIf="
+              (productForm.get('image').invalid && productForm.get('image').touched) ||
+              productForm.get('image').dirty
+            "
+          >
+            <div *ngIf="productForm.get('image').errors?.required">
+              <app-form-error
+                [displayError]="isFieldValid('image')"
+                errorMsg="Please upload an image"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('image').errors?.minlength">
+              <app-form-error
+                [displayError]="isFieldValid('image')"
+                errorMsg="Your image name must be at least 5 characters"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('image').errors?.pattern">
+              <app-form-error
+                [displayError]="isFieldValid('image')"
+                errorMsg="Please enter a valid image"
+              >
+              </app-form-error>
+            </div>
+          </div>
+          <!--Form validation for image END-->
+          <h2 class="h6">Upload Product Image:</h2>
+          <div class="custom-file mb-3">
+            <input
+              #imageInput
+              (change)="uploadImage(imageInput)"
+              type="file"
+              accept="image/*"
+              name="image"
+              formControlName="image"
+              class="custom-file-input"
+              required
+              minlength="5"
+            />
+            <label class="custom-file-label" for="image"
+              >Selected Product Image: <span *ngIf="image">{{ image }}</span></label
+            >
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div *ngIf="image" class="card mb-3">
+                <img
+                  src="{{ imageUrl + '/' + image }}"
+                  alt="{{ productName }}"
+                  class="card-img-top img-fluid"
+                />
+                <div class="card-body">
+                  <h3 class="h6 card-title">Image Preview</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div *ngIf="image" class="card mb-3">
+                <div class="card-body">
+                  <h3 class="h6 card-title">Image Details</h3>
+                  <p class="card-text">File Name: {{ image }}</p>
+                  <p *ngIf="isDefined(productImageFile)" class="card-text">
+                    Size: {{ productImageFile.size }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
+          <!--Form validation for intro BEGIN-->
+          <div
+            *ngIf="
+              (productForm.get('intro').invalid && productForm.get('intro').touched) ||
+              productForm.get('intro').dirty
+            "
+          >
+            <div *ngIf="productForm.get('intro').errors?.required">
+              <app-form-error
+                [displayError]="isFieldValid('intro')"
+                errorMsg="Please enter an intro"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('intro').errors?.minlength">
+              <app-form-error
+                [displayError]="isFieldValid('intro')"
+                errorMsg="Your intro must be at least 5 characters"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('intro').errors?.pattern">
+              <app-form-error
+                [displayError]="isFieldValid('intro')"
+                errorMsg="Please enter a valid intro"
+              >
+              </app-form-error>
+            </div>
+          </div>
+          <!--Form validation for intro END-->
+          <label for="intro">Intro: </label>
+          <textarea
+            class="form-control"
+            name="intro"
+            formControlName="intro"
+            required
+            minlength="5"
+          ></textarea>
+        </div>
+        <div class="col-md-6">
+          <!--Form validation for description BEGIN-->
+          <div
+            *ngIf="
+              (productForm.get('description').invalid && productForm.get('description').touched) ||
+              productForm.get('description').dirty
+            "
+          >
+            <div *ngIf="productForm.get('description').errors?.required">
+              <app-form-error
+                [displayError]="isFieldValid('description')"
+                errorMsg="Please enter a description"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('description').errors?.minlength">
+              <app-form-error
+                [displayError]="isFieldValid('description')"
+                errorMsg="Your description must be at least 5 characters"
+              >
+              </app-form-error>
+            </div>
+            <div *ngIf="productForm.get('description').errors?.pattern">
+              <app-form-error
+                [displayError]="isFieldValid('description')"
+                errorMsg="Please enter a valid description"
+              >
+              </app-form-error>
+            </div>
+          </div>
+          <!--Form validation for intro END-->
+          <label for="description">Description: </label>
+          <textarea
+            class="form-control"
+            name="description"
+            formControlName="description"
+            required
+            minlength="5"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <button type="reset" class="btn btn-primary">Clear Form</button>
+    <button type="submit" class="btn btn-primary float-right" [disabled]="!productForm.valid">
+      Add Product
+    </button>
+  </form>
+</section>

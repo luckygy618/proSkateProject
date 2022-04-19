@@ -1,0 +1,10 @@
+.control-label.required:before {
+  color: #d00;
+  content: '*';
+  position: absolute;
+  margin-left: 5px;
+  top: 7px;
+}
+
+app-form-error {
+}

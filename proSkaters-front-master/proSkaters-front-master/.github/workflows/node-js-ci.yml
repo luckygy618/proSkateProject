@@ -1,0 +1,34 @@
+name: node-js-ci
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  # Confirm that prettier was run on the changes
+  prettier:
+    name: Prettier Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.4.1
+      - name: Install dependencies and run prettier-check
+        run: |
+          npm install
+          npm run prettier-check
+
+  # Make sure eslint passes
+  eslint:
+    name: ESLint Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.4.1
+      - name: Install dependencies and run eslint
+        run: |
+          npm install
+          npm run eslint

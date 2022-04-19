@@ -1,0 +1,15 @@
+.input-icon {
+  margin-right: 10px;
+}
+
+#login-nav {
+  position: relative;
+}
+
+#login-panel {
+  position: absolute;
+  z-index: 99999;
+  right: 0;
+  top: 3.3rem;
+  width: 200%;
+}

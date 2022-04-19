@@ -1,0 +1,11 @@
+<section *ngIf="!isLoggedIn">
+  <div class="row justify-content-md-center">
+    <div class="col-md-6">
+      <app-register></app-register>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="isLoggedIn">
+  <app-alert [display]="isLoggedIn" type="info" message="You are logged in!"></app-alert>
+</section>

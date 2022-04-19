@@ -1,0 +1,17 @@
+<section *ngIf="receiptSaved" class="row">
+  <div class="col-md-2">
+    <img
+      src="{{ imageUrl + '/' + cartItem.product.image }}"
+      alt="{{ cartItem.product.product_name }}"
+      class="img-fluid"
+    />
+  </div>
+  <div class="col-md-8">
+    <h1 class="h4">{{ cartItem.product.product_name }}</h1>
+  </div>
+  <div class="col-md-2">
+    <h2 class="h5 text-right">
+      <strong>${{ cartItem.lineTotal.toFixed(2) }}</strong>
+    </h2>
+  </div>
+</section>

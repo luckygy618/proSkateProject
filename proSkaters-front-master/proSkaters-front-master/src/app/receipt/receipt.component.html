@@ -1,0 +1,135 @@
+<section class="border rounded p-3 mb-3">
+  <h1 class="h3 mb-3"><fa-icon [icon]="calendar"></fa-icon> Order placed on {{ date }}</h1>
+</section>
+<section class="border rounded p-3 mb-3">
+  <h1 class="h3 mb-3"><fa-icon [icon]="box"></fa-icon> Shipping and Billing Information</h1>
+  <div class="row">
+    <div class="col-md-4">
+      <h2 class="h4"><fa-icon [icon]="shipping"></fa-icon> Shipping Address</h2>
+      <p *ngIf="accountDefined">
+        <span *ngIf="isShippingSet">
+          <fa-icon [icon]="mapMarker"></fa-icon> Ship to:
+          <span *ngIf="isDefined(account.firstName) && isDefined(account.lastName)">
+            <br />
+            <span *ngIf="isDefined(account.salutation)">
+              {{ account.salutation }}
+            </span>
+            {{ account.firstName }} {{ account.lastName }}
+          </span>
+          <br />{{ shippingAddress1 }},
+          <span *ngIf="isDefined(shippingAddress2)"> <br />{{ shippingAddress2 }}, </span>
+          <br />{{ shippingCity }}, {{ shippingProvince }}, {{ shippingCountry }},
+          {{ shippingPostalCode }}
+        </span>
+      </p>
+    </div>
+    <div class="col-md-4">
+      <h2 class="h4"><fa-icon [icon]="dollarSign"></fa-icon> Payment Method</h2>
+      <p *ngIf="accountDefined && isPaymentMethodSet">
+        <fa-icon [icon]="creditCard"></fa-icon> {{ paymentType }} ending in {{ last4 }} expiring on
+        {{ month }}/{{ year }}
+      </p>
+    </div>
+    <div class="col-md-4">
+      <h2 class="h4"><fa-icon [icon]="invoice"></fa-icon> Billing Address</h2>
+      <p *ngIf="accountDefined">
+        <span *ngIf="isBillingSet">
+          <fa-icon [icon]="mapMarker"></fa-icon> Bill to:
+          <span *ngIf="isShippingSet && isBillingSet && isShippingBilling"
+            >Same as shipping address</span
+          >
+          <span *ngIf="!isShippingBilling">
+            <span *ngIf="isDefined(account.firstName) && isDefined(account.lastName)">
+              <br />
+              <span *ngIf="isDefined(account.salutation)">
+                {{ account.salutation }}
+              </span>
+              {{ account.firstName }} {{ account.lastName }}
+            </span>
+            <br />{{ billingAddress1 }},
+            <span *ngIf="isDefined(billingAddress2)"> <br />{{ billingAddress2 }}, </span>
+            <br />{{ billingCity }}, {{ billingProvince }}, {{ billingCountry }},
+            {{ billingPostalCode }}
+          </span>
+        </span>
+      </p>
+    </div>
+  </div>
+</section>
+<div class="row">
+  <div class="col-md-8">
+    <section class="border rounded p-3 mb-3">
+      <h1 class="h3 mb-3"><fa-icon [icon]="shoppingCartIcon"></fa-icon> Items Purchased</h1>
+      <section *ngIf="!receiptSaved" class="row justify-content-md-center">
+        <div class="col-md-6">
+          <app-alert [display]="!receiptSaved" type="info" message="There is no saved receipt.">
+          </app-alert>
+        </div>
+      </section>
+
+      <section *ngIf="receiptSaved">
+        <h2 class="h5 text-right"><fa-icon [icon]="dollarSign"></fa-icon> Price:</h2>
+        <ul class="list-group">
+          <li *ngFor="let item of items; let i = index" class="list-group-item">
+            <app-receipt-item [cartItem]="item" [cartIndex]="i"> </app-receipt-item>
+          </li>
+        </ul>
+        <h2 class="h5 text-right mt-3">
+          <fa-icon [icon]="calculator"></fa-icon> Subtotal ({{ totalQuantity }} item<span
+            *ngIf="totalQuantity != 1"
+            >s</span
+          >): <strong>${{ subtotal.toFixed(2) }}</strong>
+        </h2>
+      </section>
+    </section>
+  </div>
+  <div class="col-md-4">
+    <section class="border rounded p-3 mb-3">
+      <h1 class="h3 mb-3"><fa-icon [icon]="receiptIcon"></fa-icon> Order Summary</h1>
+      <div class="row align-items-end">
+        <div class="col-8">
+          Item<span *ngIf="totalQuantity != 1">s</span> ({{ totalQuantity }}):
+        </div>
+        <div class="col-4">
+          <div class="text-right">
+            <strong>${{ subtotal.toFixed(2) }}</strong>
+          </div>
+        </div>
+        <div class="col-8">Shipping & Handling:</div>
+        <div class="col-4">
+          <div class="text-right">
+            <strong>${{ shippingHandling.toFixed(2) }}</strong>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="row align-items-end">
+        <div class="col-8">Total before tax:</div>
+        <div class="col-4">
+          <div class="text-right">
+            <strong>${{ totalBeforeTax.toFixed(2) }}</strong>
+          </div>
+        </div>
+        <div class="col-8">Estimated GST/HST:</div>
+        <div class="col-4">
+          <div class="text-right">
+            <strong>${{ gstHst.toFixed(2) }}</strong>
+          </div>
+        </div>
+        <div class="col-8">Estimated PST/RST/QST:</div>
+        <div class="col-4">
+          <div class="text-right">
+            <strong>${{ pstRstQst.toFixed(2) }}</strong>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <h3 class="h5 text-success">
+        <fa-icon [icon]="calculator"></fa-icon> Order total ({{ totalQuantity }} item<span
+          *ngIf="totalQuantity != 1"
+          >s</span
+        >): <strong>${{ orderTotal.toFixed(2) }}</strong>
+      </h3>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,280 @@
+<article class="row">
+  <div class="col-md-9">
+    <div *ngIf="accountDefined">
+      <app-alert
+        [display]="isDefined(loginSuccess)"
+        type="success"
+        message="Successfully logged in to account with email address {{ account.email }}!"
+      >
+      </app-alert>
+    </div>
+    <div *ngIf="!accountDefined">
+      <app-alert
+        [display]="isDefined(loginSuccess)"
+        type="success"
+        message="Successfully logged in to account!"
+      >
+      </app-alert>
+    </div>
+    <app-alert [display]="isDefined(loginError)" type="error" message="Error: {{ loginError }}">
+    </app-alert>
+    <app-alert
+      [display]="isDefined(shoppingCartSuccess)"
+      type="success"
+      message="{{ shoppingCartSuccess }}"
+    >
+    </app-alert>
+    <app-alert
+      [display]="isDefined(shoppingCartError)"
+      type="error"
+      message="{{ shoppingCartError }}"
+    >
+    </app-alert>
+    <app-alert
+      [display]="isDefined(purchaseError)"
+      type="error"
+      message="There was an error processing the purchase. Try updating your payment method."
+    >
+    </app-alert>
+    <app-alert
+      [display]="isDefined(updatePaymentSuccess)"
+      type="success"
+      message="Error updating payment method."
+    >
+    </app-alert>
+    <app-alert
+      [display]="isDefined(updatePaymentError)"
+      type="error"
+      message="Successfully updated payment method."
+    >
+    </app-alert>
+
+    <h1 class="h2 text-center mb-3">
+      <fa-icon [icon]="cashRegister"></fa-icon> Checkout ({{ totalQuantity }} item<span
+        *ngIf="totalQuantity != 1"
+        >s</span
+      >)
+    </h1>
+    <app-login-register></app-login-register>
+    <app-purchase-failed *ngIf="isLoggedIn && isDefined(purchaseError)"></app-purchase-failed>
+    <ol *ngIf="isLoggedIn && !isDefined(purchaseError)" class="list-group">
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-md-4">
+            <h2 class="h4"><fa-icon [icon]="shipping"></fa-icon> 1. Shipping Address</h2>
+          </div>
+          <div class="col-md-5">
+            <app-alert
+              [display]="!isShippingSet"
+              type="info"
+              message="Please add a shipping address."
+            >
+            </app-alert>
+            <p *ngIf="accountDefined">
+              <span *ngIf="isShippingSet">
+                <fa-icon [icon]="mapMarker"></fa-icon> Ship to:
+                <span *ngIf="isDefined(account.firstName) && isDefined(account.lastName)">
+                  <br />
+                  <span *ngIf="isDefined(account.salutation)">
+                    {{ account.salutation }}
+                  </span>
+                  {{ account.firstName }} {{ account.lastName }}
+                </span>
+                <br />{{ shippingAddress1 }},
+                <span *ngIf="isDefined(shippingAddress2)"> <br />{{ shippingAddress2 }}, </span>
+                <br />{{ shippingCity }}, {{ shippingProvince }}, {{ shippingCountry }},
+                {{ shippingPostalCode }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-3">
+            <p class="text-right">
+              <a [routerLink]="['/account/settings']"
+                ><fa-icon [icon]="addressBook"></fa-icon> Update Shipping Address</a
+              >
+            </p>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-md-4">
+            <h2 class="h4"><fa-icon [icon]="dollarSign"></fa-icon> 2. Payment Method</h2>
+          </div>
+          <div class="col-md-5">
+            <app-alert
+              [display]="!isPaymentMethodSet"
+              type="info"
+              message="Please add a payment method."
+            >
+            </app-alert>
+            <p *ngIf="accountDefined && isPaymentMethodSet">
+              <fa-icon [icon]="creditCard"></fa-icon> {{ paymentType }} ending in
+              {{ last4 }} expiring on {{ month }}/{{ year }}
+            </p>
+            <app-alert
+              [display]="!isBillingSet"
+              type="info"
+              message="Please add a billing address."
+            >
+            </app-alert>
+            <p *ngIf="accountDefined">
+              <span *ngIf="isBillingSet">
+                <fa-icon [icon]="mapMarker"></fa-icon> Bill to:
+                <span *ngIf="isShippingSet && isBillingSet && isShippingBilling"
+                  >Same as shipping address</span
+                >
+                <span *ngIf="!isShippingBilling">
+                  <span *ngIf="isDefined(account.firstName) && isDefined(account.lastName)">
+                    <br />
+                    <span *ngIf="isDefined(account.salutation)">
+                      {{ account.salutation }}
+                    </span>
+                    {{ account.firstName }} {{ account.lastName }}
+                  </span>
+                  <br />{{ billingAddress1 }},
+                  <span *ngIf="isDefined(billingAddress2)"> <br />{{ billingAddress2 }}, </span>
+                  <br />{{ billingCity }}, {{ billingProvince }}, {{ billingCountry }},
+                  {{ billingPostalCode }}
+                </span>
+              </span>
+            </p>
+          </div>
+          <div class="col-md-3">
+            <p class="text-right">
+              <a [routerLink]="['/account/settings/payment']"
+                ><fa-icon [icon]="creditCard"></fa-icon> Update Payment Method</a
+              >
+            </p>
+            <p class="text-right">
+              <a [routerLink]="['/account/settings']"
+                ><fa-icon [icon]="addressBook"></fa-icon> Update Billing Address</a
+              >
+            </p>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <h2 class="h4"><fa-icon [icon]="shoppingCartIcon"></fa-icon> 3. Review Items</h2>
+        <app-shopping-cart
+          (successEvent)="shoppingCartSuccess = $event"
+          (errorEvent)="shoppingCartError = $event"
+        ></app-shopping-cart>
+      </li>
+      <li class="list-group-item">
+        <h2 class="h4"><fa-icon [icon]="receiptIcon"></fa-icon> 4. Place Your Order</h2>
+        <div class="row">
+          <div class="col-md-8">
+            <h3 class="h5 text-primary">
+              <fa-icon [icon]="calculator"></fa-icon> Order total ({{ totalQuantity }} item<span
+                *ngIf="totalQuantity != 1"
+                >s</span
+              >): <strong>${{ orderTotal.toFixed(2) }}</strong>
+            </h3>
+            <p>
+              <small
+                >By placing your order you are agreeing to ProSkaters Place's Terms of Use and
+                Privacy Policy</small
+              >
+            </p>
+          </div>
+          <div class="col-md-4">
+            <button
+              (click)="onClickPlaceOrder()"
+              [disabled]="
+                cartEmpty ||
+                !accountDefined ||
+                !isShippingSet ||
+                !isBillingSet ||
+                !isPaymentMethodSet
+              "
+              class="btn btn-success btn-block mb-3"
+            >
+              <fa-icon [icon]="check"></fa-icon> Place Your Order
+            </button>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </div>
+  <div class="col-md-3">
+    <section id="place-order-panel" class="border border-primary rounded shadow p-3">
+      <app-alert
+        [display]="!isLoggedIn"
+        type="info"
+        message="Please log into your account to place an order."
+      >
+      </app-alert>
+      <app-alert
+        [display]="cartEmpty"
+        type="info"
+        message="Add something to your cart to place an order."
+      >
+      </app-alert>
+
+      <h1 class="h4"><fa-icon [icon]="invoice"></fa-icon> Your Order</h1>
+      <div *ngIf="isLoggedIn">
+        <button
+          (click)="onClickPlaceOrder()"
+          [disabled]="
+            cartEmpty || !accountDefined || !isShippingSet || !isBillingSet || !isPaymentMethodSet
+          "
+          class="btn btn-success btn-block mb-3"
+        >
+          <fa-icon [icon]="check"></fa-icon> Place Your Order
+        </button>
+        <p class="text-center">
+          <small
+            >By placing your order you are agreeing to ProSkaters Place's Terms of Use and Privacy
+            Policy</small
+          >
+        </p>
+      </div>
+      <h2 class="h5"><fa-icon [icon]="invoice"></fa-icon> Order Summary</h2>
+      <div class="row align-items-end">
+        <div class="col-8">
+          Item<span *ngIf="totalQuantity != 1">s</span> ({{ totalQuantity }}):
+        </div>
+        <div class="col-4">
+          <div class="text-right">
+            <strong>${{ subtotal.toFixed(2) }}</strong>
+          </div>
+        </div>
+        <div class="col-8">Shipping & Handling:</div>
+        <div class="col-4">
+          <div class="text-right">
+            <strong>${{ shippingHandling.toFixed(2) }}</strong>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="row align-items-end">
+        <div class="col-8">Total before tax:</div>
+        <div class="col-4">
+          <div class="text-right">
+            <strong>${{ totalBeforeTax.toFixed(2) }}</strong>
+          </div>
+        </div>
+        <div class="col-8">Estimated GST/HST:</div>
+        <div class="col-4">
+          <div class="text-right">
+            <strong>${{ gstHst.toFixed(2) }}</strong>
+          </div>
+        </div>
+        <div class="col-8">Estimated PST/RST/QST:</div>
+        <div class="col-4">
+          <div class="text-right">
+            <strong>${{ pstRstQst.toFixed(2) }}</strong>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <h3 class="h5 text-primary">
+        <fa-icon [icon]="calculator"></fa-icon> Order total ({{ totalQuantity }} item<span
+          *ngIf="totalQuantity != 1"
+          >s</span
+        >): <strong>${{ orderTotal.toFixed(2) }}</strong>
+      </h3>
+    </section>
+  </div>
+</article>

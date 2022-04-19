@@ -1,0 +1,21 @@
+<div class="container-fluid">
+  <ul class="row">
+    <li *ngFor="let product of productList" class="col-sm-12 col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <img
+            *ngIf="isDefined(product)"
+            class="card-img-top"
+            src="{{ imageUrl + '/' + product.image }}"
+            alt="{{ product.product_name }}"
+            class="img-fluid"
+          />
+          <h2 class="h5 card-title">
+            <a [routerLink]="['/product', product.product_id]">{{ product.product_name }}</a>
+          </h2>
+          <h3 class="h6 card-subtitle">${{ product.price }}</h3>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

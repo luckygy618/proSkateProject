@@ -1,0 +1,49 @@
+<section class="row">
+  <div class="col-md-2">
+    <img
+      src="{{ imageUrl + '/' + cartItem.product.image }}"
+      alt="{{ cartItem.product.product_name }}"
+      class="img-fluid"
+    />
+  </div>
+  <div class="col-md-8">
+    <h1 class="h4">{{ cartItem.product.product_name }}</h1>
+    <h2 class="h5 text-success">{{ cartItem.product.stock_amount }} left in stock.</h2>
+    <form *ngIf="cartItem.product.stock_amount > 0">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label for="quantity" class="input-group-text"
+                ><fa-icon [icon]="numericUp" class="input-icon"></fa-icon> Quantity:</label
+              >
+            </div>
+            <select
+              (change)="onChangeQuantity()"
+              [(ngModel)]="cartItem.quantity"
+              name="quantity"
+              id="quantity"
+              class="form-control"
+              required
+              minlength="1"
+              maxlength="2"
+              pattern="^[0-9]{1,2}$"
+            >
+              <option *ngFor="let amount of stockArray" [value]="amount">{{ amount }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <button (click)="onClickRemove()" class="btn btn-danger btn-block">
+            <fa-icon [icon]="trash" class="input-icon"></fa-icon> Remove Item
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-md-2">
+    <h2 class="h5 text-right">
+      <strong>${{ cartItem.lineTotal.toFixed(2) }}</strong>
+    </h2>
+  </div>
+</section>

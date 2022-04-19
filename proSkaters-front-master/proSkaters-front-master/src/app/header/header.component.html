@@ -1,0 +1,19 @@
+<header class="bg-white pt-1 pb-1">
+  <div class="container-fluid">
+    <div class="row justify-content-stretch align-items-center">
+      <div class="col-md-6 d-flex justify-content-start align-items-center">
+        <h1 class="mr-2">
+          <a [routerLink]="['/']"
+            ><img src="{{ logoSrc }}" alt="ProSkaters Place" class="img-fluid"
+          /></a>
+        </h1>
+        <app-nav class="flex-fill"></app-nav>
+      </div>
+      <div class="col-md-6 d-flex justify-content-end align-items-center">
+        <app-cart-nav></app-cart-nav>
+        <app-customer-account-nav *ngIf="isLoggedIn"></app-customer-account-nav>
+        <app-login-nav *ngIf="!isLoggedIn"></app-login-nav>
+      </div>
+    </div>
+  </div>
+</header>
